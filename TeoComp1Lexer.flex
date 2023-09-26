@@ -9,7 +9,7 @@ import java_cup.runtime.Symbol;
 /*%cupsym Simbolo*/
 %cup
 %public
-%class Lexer
+%class Lexico
 %line
 %column
 %char

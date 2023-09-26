@@ -9,7 +9,7 @@ import java_cup.runtime.Symbol;
 
 
 @SuppressWarnings("fallthrough")
-public class Lexer implements java_cup.runtime.Scanner {
+public class Lexico implements java_cup.runtime.Scanner {
 
   /** This character denotes the end of file. */
   public static final int YYEOF = -1;
@@ -277,7 +277,7 @@ public class Lexer implements java_cup.runtime.Scanner {
    *
    * @param   in  the java.io.Reader to read input from.
    */
-  public Lexer(java.io.Reader in) {
+  public Lexico(java.io.Reader in) {
     this.zzReader = in;
   }
 
@@ -693,7 +693,7 @@ public class Lexer implements java_cup.runtime.Scanner {
       if (zzInput == YYEOF && zzStartRead == zzCurrentPos) {
         zzAtEOF = true;
             zzDoEOF();
-          { return new java_cup.runtime.Symbol(sym.EOF); }
+          { return null; }
       }
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
