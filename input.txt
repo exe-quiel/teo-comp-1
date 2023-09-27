@@ -1,4 +1,7 @@
 a := "hola-?";
+bin_var := (10,2);
+hex_var := (af,16);
+oct_var := "(af,8)";
 
 /* Esto es un for loop */ 
 for a in [1,2,3.0,4]: /* Otro comment */

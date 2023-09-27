@@ -13,6 +13,9 @@ import java_cup.runtime.Symbol;
 %line
 %column
 %char
+%eofval{
+	return null;
+%eofval}
 
 
 LETRA = [a-zA-Z]
@@ -40,6 +43,8 @@ CONST_HEX = \((DIGITO|[A-F]|[a-f])+,16\)
 
 	{ID}			{System.out.println("Token ID encontrado, Lexema "+ yytext());}
 
+	{CONST_STRING}	{System.out.println("Token CONST_STRING, encontrado Lexema "+ yytext());}
+
 	{CONST_INT}		{System.out.println("Token CONST_INT, encontrado Lexema "+ yytext());}
 
 	{CONST_FLOAT}	{System.out.println("Token CONST_FLOAT, encontrado Lexema "+ yytext());}
@@ -47,8 +52,6 @@ CONST_HEX = \((DIGITO|[A-F]|[a-f])+,16\)
 	{CONST_BIN}		{System.out.println("Token CONST_BIN, encontrado Lexema "+ yytext());}
 
 	{CONST_HEX}		{System.out.println("Token CONST_HEX, encontrado Lexema "+ yytext());}
-
-	{CONST_STRING}	{System.out.println("Token CONST_STRING, encontrado Lexema "+ yytext());}
 
 	{COMMENT}		{System.out.println("Token COMMENT, encontrado Lexema "+ yytext());}
 
