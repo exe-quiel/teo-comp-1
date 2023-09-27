@@ -1,1 +1,5 @@
-abstract
+a := "hola-?";
+
+/* Esto es un for loop */ 
+for a in [1,2,3.0,4]: /* Otro comment */
+	print(a);
