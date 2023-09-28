@@ -17,7 +17,7 @@ import java.util.ArrayList;
 		resultados.add(new Resultado(this.yytext(), this.yyline, this.yycolumn, this.yychar, this.yylength()));
 	} 
 
-	public List<Resultado> getResultados(){
+	public List<Resultado> getResultados() {
 		return resultados;
 	}
 	
