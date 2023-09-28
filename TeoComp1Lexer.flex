@@ -58,6 +58,32 @@ CONST_HEX = \((DIGITO|[A-F]|[a-f])+,16\)
 
 <YYINITIAL> {
 
+	"if"			{agregarToken("PR_IF");}
+	
+	"endif"			{agregarToken("PR_ENDIF");}
+	
+	"repeat"			{agregarToken("PR_REPEAT");}
+	
+	"until"			{agregarToken("PR_UNTIL");}
+	
+	"write"			{agregarToken("PR_WRITE");}
+	
+	"minimo"			{agregarToken("PR_MINIMO");}
+	
+	"maximo"			{agregarToken("PR_MAXIMO");}
+	
+	"define"			{agregarToken("PR_DEFINE");}
+	
+	"enddefine"			{agregarToken("PR_ENDDEFINE");}
+	
+	"program"			{agregarToken("PR_PROGRAM");}
+	
+	"end"			{agregarToken("PR_END");}
+	
+	"and"			{agregarToken("PR_AND");}
+	
+	"or"			{agregarToken("PR_OR");}
+
 	{ESPACIO}		{agregarToken("ESPACIO");}
 
 	{ID}			{agregarToken("ID");}

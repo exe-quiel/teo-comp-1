@@ -4,3 +4,4 @@
 bin/*
 *.jar
 /bin/
+*.bat
