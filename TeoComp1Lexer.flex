@@ -1,9 +1,27 @@
 package ar.edu.unlu.teocomp1.grupo3;
 
 import java_cup.runtime.Symbol;
-
+import java.util.List;
+import java.util.ArrayList;
 
 %%
+
+%{
+	private List<Resultado>	resultados = new ArrayList<>();
+	
+	private void agregarToken(String token){
+		resultados.add(new Resultado(token, this.yytext(), this.yyline, this.yycolumn, this.yychar, this.yylength()));
+	}
+	
+	private void agregarError(){
+		resultados.add(new Resultado(this.yytext(), this.yyline, this.yycolumn, this.yychar, this.yylength()));
+	} 
+
+	public List<Resultado> getResultados(){
+		return resultados;
+	}
+	
+%}
 
 
 /*%cupsym Simbolo*/
@@ -24,6 +42,7 @@ ESPACIO = [ ]
 TAB = \t
 FORM_FEED = \f
 ENTER = \r\n
+/*ENTER = \n */
 CAR_ESP = [\-_!?] 
 ID = {LETRA}({LETRA}|{DIGITO}|_)*
 CONST_INT = {DIGITO}+
@@ -39,67 +58,67 @@ CONST_HEX = \((DIGITO|[A-F]|[a-f])+,16\)
 
 <YYINITIAL> {
 
-	{ESPACIO}		{System.out.println("Token ESPACIO encontrado, Lexema "+ yytext());}
+	{ESPACIO}		{agregarToken("ESPACIO");}
 
-	{ID}			{System.out.println("Token ID encontrado, Lexema "+ yytext());}
+	{ID}			{agregarToken("ID");}
 
-	{CONST_STRING}	{System.out.println("Token CONST_STRING, encontrado Lexema "+ yytext());}
+	{CONST_STRING}	{agregarToken("CONST_STRING");}
 
-	{CONST_INT}		{System.out.println("Token CONST_INT, encontrado Lexema "+ yytext());}
+	{CONST_INT}		{agregarToken("CONST_INT");}
 
-	{CONST_FLOAT}	{System.out.println("Token CONST_FLOAT, encontrado Lexema "+ yytext());}
+	{CONST_FLOAT}	{agregarToken("CONST_FLOAT");}
 
-	{CONST_BIN}		{System.out.println("Token CONST_BIN, encontrado Lexema "+ yytext());}
+	{CONST_BIN}		{agregarToken("CONST_BIN");}
 
-	{CONST_HEX}		{System.out.println("Token CONST_HEX, encontrado Lexema "+ yytext());}
+	{CONST_HEX}		{agregarToken("CONST_HEX");}
 
-	{COMMENT}		{System.out.println("Token COMMENT, encontrado Lexema "+ yytext());}
+	{COMMENT}		{agregarToken("COMMENT");}
 
-	":="			{System.out.println("Token ASSIGN encontrado, Lexema "+ yytext());}
+	":="			{agregarToken("ASSIGN");}
 
-	"+"				{System.out.println("Token OP_SUM encontrado, Lexema "+ yytext());}
+	"+"				{agregarToken("OP_SUM");}
 
-	"-"				{System.out.println("Token OP_RESTA encontrado, Lexema "+ yytext());}
+	"-"				{agregarToken("OP_RESTA");}
 
-	"*"				{System.out.println("Token OP_MULT encontrado, Lexema "+ yytext());}
+	"*"				{agregarToken("OP_MULT");}
 
-	"/"				{System.out.println("Token OP_DIV encontrado, Lexema "+ yytext());}
+	"/"				{agregarToken("OP_DIV");}
 
-	"<>"			{System.out.println("Token OP_DIFF encontrado, Lexema "+ yytext());}
+	"<>"			{agregarToken("OP_DIFF");}
 
-	"<"				{System.out.println("Token OP_LT encontrado, Lexema "+ yytext());}
+	"<"				{agregarToken("OP_LT");}
 
-	">"				{System.out.println("Token OP_GT encontrado, Lexema "+ yytext());}
+	">"				{agregarToken("OP_GT");}
 
-	"<="			{System.out.println("Token OP_LE encontrado, Lexema "+ yytext());}
+	"<="			{agregarToken("OP_LE");}
 
-	">="			{System.out.println("Token OP_GE encontrado, Lexema "+ yytext());}
+	">="			{agregarToken("OP_GE");}
 
-	"=="			{System.out.println("Token OP_EQ encontrado, Lexema "+ yytext());}
+	"=="			{agregarToken("OP_EQ");}
 
-	"["				{System.out.println("Token LS_ABRIR encontrado, Lexema "+ yytext());}
+	"["				{agregarToken("LS_ABRIR");}
 
-	"]"				{System.out.println("Token LS_CERRAR encontrado, Lexema "+ yytext());}
+	"]"				{agregarToken("LS_CERRAR");}
 
-	"{"				{System.out.println("Token BL_ABRIR encontrado, Lexema "+ yytext());}
+	"{"				{agregarToken("BL_ABRIR");}
 
-	"}"				{System.out.println("Token BL_CERRAR encontrado, Lexema "+ yytext());}
+	"}"				{agregarToken("BL_CERRAR");}
 
-	"("				{System.out.println("Token PR_ABRIR encontrado, Lexema "+ yytext());}
+	"("				{agregarToken("PAREN_ABRIR");}
 
-	")"				{System.out.println("Token PR_CERRAR encontrado, Lexema "+ yytext());}
+	")"				{agregarToken("PAREN_CERRAR");}
 
-	","				{System.out.println("Token COMA encontrado, Lexema "+ yytext());}
+	","				{agregarToken("COMA");}
 
-	":"				{System.out.println("Token DOSP encontrado, Lexema "+ yytext());}
+	":"				{agregarToken("DOSP");}
 
-	";"				{System.out.println("Token PYC encontrado, Lexema "+ yytext());}
+	";"				{agregarToken("PYC");}
 
-	{TAB}			{System.out.println("Token TAB encontrado, Lexema "+ yytext());}
+	{TAB}			{agregarToken("TAB");}
 
-	{FORM_FEED}		{System.out.println("Token FORM_FEED encontrado, Lexema "+ yytext());}
+	{FORM_FEED}		{agregarToken("FORM_FEED");}
 
-	{ENTER}			{System.out.println("Token ENTER encontrado, Lexema "+ yytext());}
+	{ENTER}			{agregarToken("ENTER");}
 }
 
-[^]					{ throw new Error("Caracter no permitido: <" + yytext() + "> en la linea [" + yyline + "] columna [" + yycolumn + "]"); }
+[^]					{agregarError(); }

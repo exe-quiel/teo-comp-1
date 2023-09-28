@@ -12,7 +12,9 @@ public class Main {
 		InputStream inputStream = null;
 		inputStream = new FileInputStream(new File("input.txt"));
 		InputStreamReader inputReader = new InputStreamReader(inputStream);
-		new Lexico(inputReader).next_token();
+		Lexico lexico = new Lexico(inputReader);
+		lexico.next_token();
+		lexico.getResultados();
 		System.out.println("Todo OK");
 	}
 
