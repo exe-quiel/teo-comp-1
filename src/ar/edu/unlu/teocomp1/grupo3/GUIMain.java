@@ -119,7 +119,8 @@ public class GUIMain extends Application {
 			textArea.selectRange((int) resultado.getInicio(), (int) resultado.getInicio() + resultado.getLargo());
 		});
 		resultadoLabel.setTextFill(resultado.isError() ? Color.RED : Color.BLACK);
-		String texto = String.format("%d:%d\tLexema [%s]\tToken [%s]", resultado.getLinea(), resultado.getColumna(),
+		String texto = String.format("Línea %d Columna %d Lexema [%s] Token [%s]",
+				resultado.getLinea(), resultado.getColumna(),
 				resultado.getLexema(), resultado.getToken());
 		resultadoLabel.setText(texto);
 		return resultadoLabel;
