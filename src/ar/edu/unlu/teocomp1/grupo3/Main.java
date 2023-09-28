@@ -15,5 +15,4 @@ public class Main {
 		new Lexico(inputReader).next_token();
 		System.out.println("Todo OK");
 	}
-
 }
