@@ -2,23 +2,35 @@ package ar.edu.unlu.teocomp1.grupo3;
 
 import java.awt.EventQueue;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.JTextArea;
+import javax.swing.ListCellRenderer;
+
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JList;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.awt.event.ActionEvent;
+import java.awt.Font;
 
 public class VentanaMain extends JFrame {
 
@@ -61,7 +73,9 @@ public class VentanaMain extends JFrame {
 		contentPane.setLayout(new BorderLayout(0, 0));
 		
 		JTextArea textArea = new JTextArea();
-		contentPane.add(textArea, BorderLayout.CENTER);
+		textArea.setFont(new Font("Monospaced", Font.PLAIN, 20));
+		JScrollPane scrollPaneTextArea = new JScrollPane(textArea);
+		contentPane.add(scrollPaneTextArea, BorderLayout.CENTER);
 		
 		JMenuItem mntmNewMenuItem = new JMenuItem("Abrir");
 		mntmNewMenuItem.addActionListener(new ActionListener() {
@@ -75,12 +89,10 @@ public class VentanaMain extends JFrame {
 							InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
 							BufferedReader bufferedReader = new BufferedReader(inputStreamReader)){
 						String linea;
-						while ((linea = bufferedReader.readLine())!=null) {
+						while ((linea = bufferedReader.readLine()) != null) {
 							textArea.append(linea);
 							textArea.append("\n");
 						}
-					
-						
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -92,12 +104,57 @@ public class VentanaMain extends JFrame {
 		
 		JMenu mnNewMenu_1 = new JMenu("Editor");
 		menuBar.add(mnNewMenu_1);
+		DefaultListModel<Resultado> listModel = new DefaultListModel<Resultado>();
+		JList<Resultado> list = new JList<>(listModel);
+		list.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		JScrollPane scrollPane = new JScrollPane(list);
+		list.setCellRenderer(new ListCellRenderer<Resultado>() {
+
+			@Override
+			public Component getListCellRendererComponent(JList<? extends Resultado> list, Resultado value, int index,
+					boolean isSelected, boolean cellHasFocus) {
+				String lexema = value.getLexema();
+				String textoLabel = String.format("Línea %d Columna %d Lexema [%s] Token [%s]",
+						value.getLinea(), value.getColumna(), "\n".equals(lexema) ? " " : lexema, value.getToken());
+				JLabel label = new JLabel(textoLabel);
+				String nombre = label.getFont().getName();
+				int estilo = label.getFont().getStyle();
+				label.setFont(new Font(nombre, estilo, 20));
+
+				if (value.isError())
+					label.setForeground(Color.RED);
+				list.add(label);
+				return label;
+			}
+			
+		});
+		list.addListSelectionListener(new ListSelectionListener() {
+
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				Resultado resultado = list.getSelectedValue();
+				System.out.println("CLICK " + resultado.getLexema());
+				textArea.requestFocus();
+				textArea.select(resultado.getInicio(), resultado.getInicio() + resultado.getTamanio());
+			}
+		});
+		contentPane.add(scrollPane, BorderLayout.SOUTH);
 		
 		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Analizar");
+		mntmNewMenuItem_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				listModel.clear();
+				try (ByteArrayInputStream is = new ByteArrayInputStream(textArea.getText().getBytes());
+						InputStreamReader reader = new InputStreamReader(is)) {
+					Lexico lexico = new Lexico(reader);
+					lexico.next_token();
+					lexico.getResultados().forEach(listModel::addElement);
+				} catch (Exception e2) {
+					System.err.println(e2);
+				}
+			}
+		});
 		mnNewMenu_1.add(mntmNewMenuItem_1);
-		
-		JList list = new JList();
-		contentPane.add(list, BorderLayout.SOUTH);
 	}
 
 }

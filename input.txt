@@ -3,8 +3,11 @@ bin_var := (10,2);
 hex_var := (af,16);
 str_vacio := "";
 
-/* Esto es un for loop */ 
-for a in [1,2,3.0,4]: /* Otro comment */
-	print(a);
+/* Esto es un loop infinito */ 
+repeat { /* Otro comment */
+    a := 1:
+    write(a);
+until 1 != 2;
+
 maximo([1,5,8]);
 minimo([1,5,8]);
