@@ -6,3 +6,5 @@ str_vacio := "";
 /* Esto es un for loop */ 
 for a in [1,2,3.0,4]: /* Otro comment */
 	print(a);
+maximo([1,5,8]);
+minimo([1,5,8]);

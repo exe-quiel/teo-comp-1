@@ -14,7 +14,9 @@ public class Main {
 		InputStreamReader inputReader = new InputStreamReader(inputStream);
 		Lexico lexico = new Lexico(inputReader);
 		lexico.next_token();
-		lexico.getResultados();
+		for (Resultado resultado : lexico.getResultados()) {
+			System.out.println(resultado.getLexema());
+		}
 		System.out.println("Todo OK");
 	}
 
