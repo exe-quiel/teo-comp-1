@@ -41,8 +41,8 @@ DIGITO = [0-9]
 ESPACIO = [ ]
 TAB = \t
 FORM_FEED = \f
-ENTER = \r\n
-/*ENTER = \n */
+/*ENTER = \r\n */
+ENTER = \n
 CAR_ESP = [\-_!?] 
 ID = {LETRA}({LETRA}|{DIGITO}|_)*
 CONST_INT = {DIGITO}+
@@ -84,7 +84,8 @@ CONST_HEX = \((DIGITO|[A-F]|[a-f])+,16\)
 	
 	"or"			{agregarToken("PR_OR");}
 
-	{ESPACIO}		{agregarToken("ESPACIO");}
+	/*{ESPACIO}		{agregarToken("ESPACIO");} */
+	{ESPACIO}		{System.out.println("espacio");}
 
 	{ID}			{agregarToken("ID");}
 
@@ -140,11 +141,14 @@ CONST_HEX = \((DIGITO|[A-F]|[a-f])+,16\)
 
 	";"				{agregarToken("PYC");}
 
-	{TAB}			{agregarToken("TAB");}
+	/*{TAB}			{agregarToken("TAB");} */
+	{TAB}			{System.out.println("tab");}
 
-	{FORM_FEED}		{agregarToken("FORM_FEED");}
+	/*{FORM_FEED}		{agregarToken("FORM_FEED");}*/
+	{FORM_FEED}		{System.out.println("FORM_FEED");}
 
-	{ENTER}			{agregarToken("ENTER");}
+	/*{ENTER}			{agregarToken("ENTER");}*/
+	{ENTER}			{System.out.println("ENTER");}
 }
 
 [^]					{agregarError(); }
