@@ -33,9 +33,6 @@ public class VentanaMain extends JFrame {
 
 	private JPanel contentPane;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -49,66 +46,70 @@ public class VentanaMain extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
 	public VentanaMain() {
 		setTitle("Grupo3_IDE");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1000, 800);
-		
+
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
-		
-		JMenu mnNewMenu = new JMenu("Archivo");
-		menuBar.add(mnNewMenu);
-		
+
+		JMenu menuArchivo = new JMenu("Archivo");
+		menuBar.add(menuArchivo);
+
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
-		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
-		
+		setContentPane(contentPane);
+
 		JTextArea textArea = new JTextArea();
 		contentPane.add(textArea, BorderLayout.CENTER);
-		
-		JMenuItem mntmNewMenuItem = new JMenuItem("Abrir");
-		mntmNewMenuItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+
+		// Lee el archivo línea por línea y coloca el contenido en el JTextArea.
+		JMenuItem menuItemAbrir = new JMenuItem("Abrir");
+		menuItemAbrir.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent event) {
 				JFileChooser fileChooser = new JFileChooser(new File(System.getProperty("user.dir")));
-				int r = fileChooser.showOpenDialog(VentanaMain.this);
-				if (r == JFileChooser.APPROVE_OPTION) {
+				int estadoSeleccion = fileChooser.showOpenDialog(VentanaMain.this);
+				if (estadoSeleccion == JFileChooser.APPROVE_OPTION) {
 					File selectedFile = fileChooser.getSelectedFile();
-					System.out.println(selectedFile.getAbsolutePath());
-					try(FileInputStream fileInputStream = new FileInputStream(selectedFile);
+					System.out.println("Archivo seleccionado: " + selectedFile.getAbsolutePath());
+
+					try (FileInputStream fileInputStream = new FileInputStream(selectedFile);
 							InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
-							BufferedReader bufferedReader = new BufferedReader(inputStreamReader)){
+							BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
+
+						textArea.setText("");
+
 						String linea;
-						while ((linea = bufferedReader.readLine())!=null) {
+						while ((linea = bufferedReader.readLine()) != null) {
 							textArea.append(linea);
 							textArea.append("\n");
 						}
-					
-						
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+					} catch (IOException e) {
+						System.err.println("Se produjo un error: " + e);
 					}
 				}
 			}
 		});
-		mnNewMenu.add(mntmNewMenuItem);
-		
+
+		menuArchivo.add(menuItemAbrir);
+
 		DefaultListModel<Resultado> listModel = new DefaultListModel<>();
-		JList<Resultado> list = new JList<>(listModel);
-		list.setVisibleRowCount(20);
-		list.setCellRenderer(new ListCellRenderer<Resultado>() {
+		JList<Resultado> listaGuiResultados = new JList<>(listModel);
+		listaGuiResultados.setVisibleRowCount(20);
+
+		// Cada token se muestra como un JLabel que contiene la información de ese token
+		// (línea, columna, lexema y token)
+		listaGuiResultados.setCellRenderer(new ListCellRenderer<Resultado>() {
 
 			@Override
 			public Component getListCellRendererComponent(JList<? extends Resultado> list, Resultado value, int index,
 					boolean isSelected, boolean cellHasFocus) {
-				// TODO Auto-generated method stub
-				String texto = String.format("linea %d columna %d lexema {%s} token {%s}", value.getLinea(), value.getColumna(), value.getLexema(), value.getToken());
+
+				String texto = String.format("linea %d columna %d lexema {%s} token {%s}", value.getLinea(),
+						value.getColumna(), value.getLexema(), value.getToken());
 				JLabel label = new JLabel(texto);
 				if (value.isError()) {
 					label.setForeground(Color.red);
@@ -116,58 +117,59 @@ public class VentanaMain extends JFrame {
 				return label;
 			}
 		});
-		
-		list.addListSelectionListener(new ListSelectionListener() {
-			
+
+		// Al hacer clic sobre un token en la lista de resultados,
+		// se selecciona el lexema correspondiente en el JTextArea
+		listaGuiResultados.addListSelectionListener(new ListSelectionListener() {
+
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				// TODO Auto-generated method stub
 				textArea.requestFocus();
-				Resultado r = list.getSelectedValue();
-				textArea.select(r.getInicio(), r.getInicio() + r.getTamanio());
+				Resultado resultado = listaGuiResultados.getSelectedValue();
+				textArea.select(resultado.getInicio(), resultado.getInicio() + resultado.getTamanio());
 			}
 		});
-		
-		contentPane.add(new JScrollPane(list), BorderLayout.SOUTH);
-		
-		JMenu mnNewMenu_1 = new JMenu("Editor");
-		menuBar.add(mnNewMenu_1);
-		
-		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Analizar");
-		mntmNewMenuItem_1.addActionListener(new ActionListener() {
+
+		contentPane.add(new JScrollPane(listaGuiResultados), BorderLayout.SOUTH);
+
+		JMenu menuEditor = new JMenu("Editor");
+		menuBar.add(menuEditor);
+
+		/*
+		 * Este botón:
+		 * 
+		 * 1. instancia la clase generada Lexico
+		 * 2. analiza el contenido del JTextArea
+		 * 3. muestra los resultados en el JList
+		 * 4. crea el archivo que contiene la tabla de símbolos
+		 */ 
+		JMenuItem menuItemAnalizar = new JMenuItem("Analizar");
+		menuItemAnalizar.addActionListener(new ActionListener() {
+
 			public void actionPerformed(ActionEvent e) {
 				procesarDatos();
 			}
-			
+
 			private void procesarDatos() {
-		        String inputText = textArea.getText(); // Obtener el texto de la TextArea
-		        
-		        try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(inputText.getBytes());
-		        		InputStreamReader inputStreamReader = new InputStreamReader(byteArrayInputStream)) {
-					//Usar lexico
-		        	 Lexico lexer = new Lexico(inputStreamReader);
-		        	 lexer.next_token();
-		        	 listModel.clear();
-		        	 for (Resultado resultado : lexer.getResultados()) {
-		        		 // Actualiza el modelo de la lista con los resultados
-		        		 listModel.addElement(resultado);
-		        	 } 
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				};
+				String inputText = textArea.getText(); // Obtener el texto de la TextArea
+				try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(inputText.getBytes());
+						InputStreamReader inputStreamReader = new InputStreamReader(byteArrayInputStream)) {
+					// Usar lexico
+					Lexico lexer = new Lexico(inputStreamReader);
+					lexer.next_token();
+					listModel.clear();
 
+					// TODO Acá deberíamos crear el archivo de la tabla de símbolos
 
-		    }
-			
+					for (Resultado resultado : lexer.getResultados()) {
+						// Actualiza el modelo de la lista con los resultados
+						listModel.addElement(resultado);
+					}
+				} catch (IOException e) {
+					System.err.println("Se produjo un error: " + e);
+				}
+			}
 		});
-		mnNewMenu_1.add(mntmNewMenuItem_1);
-		
-
+		menuEditor.add(menuItemAnalizar);
 	}
-	
-	
-	
-	
-
 }

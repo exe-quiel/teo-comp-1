@@ -6,9 +6,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public class Main {
+public class ConsolaMain {
 
-	 /*public static void main(String[] args) throws IOException {
+	 /*
+	 public static void main(String[] args) throws IOException {
 		InputStream inputStream = null;
 		inputStream = new FileInputStream(new File("input.txt"));
 		InputStreamReader inputReader = new InputStreamReader(inputStream);
@@ -20,5 +21,4 @@ public class Main {
 		System.out.println("Todo OK");
 	}
 	*/
-
 }

@@ -59,32 +59,31 @@ CONST_HEX = \((DIGITO|[A-F]|[a-f])+,16\)
 <YYINITIAL> {
 
 	"if"			{agregarToken("PR_IF");}
-	
+
 	"endif"			{agregarToken("PR_ENDIF");}
-	
+
 	"repeat"			{agregarToken("PR_REPEAT");}
-	
+
 	"until"			{agregarToken("PR_UNTIL");}
-	
+
 	"write"			{agregarToken("PR_WRITE");}
-	
+
 	"minimo"			{agregarToken("PR_MINIMO");}
-	
+
 	"maximo"			{agregarToken("PR_MAXIMO");}
-	
+
 	"define"			{agregarToken("PR_DEFINE");}
-	
+
 	"enddefine"			{agregarToken("PR_ENDDEFINE");}
-	
+
 	"program"			{agregarToken("PR_PROGRAM");}
-	
+
 	"end"			{agregarToken("PR_END");}
-	
+
 	"and"			{agregarToken("PR_AND");}
-	
+
 	"or"			{agregarToken("PR_OR");}
 
-	/*{ESPACIO}		{agregarToken("ESPACIO");} */
 	{ESPACIO}		{System.out.println("espacio");}
 
 	{ID}			{agregarToken("ID");}
@@ -99,7 +98,7 @@ CONST_HEX = \((DIGITO|[A-F]|[a-f])+,16\)
 
 	{CONST_HEX}		{agregarToken("CONST_HEX");}
 
-	{COMMENT}		{agregarToken("COMMENT");}
+	{COMMENT}		{System.out.println("COMMENT");}
 
 	":="			{agregarToken("ASSIGN");}
 
@@ -141,13 +140,8 @@ CONST_HEX = \((DIGITO|[A-F]|[a-f])+,16\)
 
 	";"				{agregarToken("PYC");}
 
-	/*{TAB}			{agregarToken("TAB");} */
 	{TAB}			{System.out.println("tab");}
-
-	/*{FORM_FEED}		{agregarToken("FORM_FEED");}*/
 	{FORM_FEED}		{System.out.println("FORM_FEED");}
-
-	/*{ENTER}			{agregarToken("ENTER");}*/
 	{ENTER}			{System.out.println("ENTER");}
 }
 

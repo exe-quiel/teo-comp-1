@@ -914,7 +914,7 @@ public class Lexico implements java_cup.runtime.Scanner {
             // fall through
           case 78: break;
           case 34: 
-            { agregarToken("COMMENT");
+            { System.out.println("COMMENT");
             } 
             // fall through
           case 79: break;

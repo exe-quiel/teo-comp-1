@@ -12,7 +12,7 @@ public class Resultado {
 		this(lexema, linea, columna, inicio, tamanio);
 		this.token = token;
 	}
-	
+
 	public Resultado(String lexema, int linea, int columna, int inicio, int tamanio) {
 		this.lexema = lexema;
 		this.linea = linea;
