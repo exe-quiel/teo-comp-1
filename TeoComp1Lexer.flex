@@ -7,22 +7,21 @@ import java.util.ArrayList;
 %%
 
 %{
-	private List<Resultado>	resultados = new ArrayList<>();
-	
-	private void agregarToken(String token){
-		resultados.add(new Resultado(token, this.yytext(), this.yyline, this.yycolumn, this.yychar, this.yylength()));
-	}
-	
-	private void agregarError(){
-		resultados.add(new Resultado(this.yytext(), this.yyline, this.yycolumn, this.yychar, this.yylength()));
-	} 
+    private List<Resultado>    resultados = new ArrayList<>();
+    
+    private void agregarToken(String token){
+        resultados.add(new Resultado(token, this.yytext(), this.yyline, this.yycolumn, this.yychar, this.yylength()));
+    }
 
-	public List<Resultado> getResultados() {
-		return resultados;
-	}
-	
+    private void agregarError(){
+        resultados.add(new Resultado(this.yytext(), this.yyline, this.yycolumn, this.yychar, this.yylength()));
+    } 
+
+    public List<Resultado> getResultados() {
+        return resultados;
+    }
+
 %}
-
 
 /*%cupsym Simbolo*/
 %cup
@@ -32,9 +31,8 @@ import java.util.ArrayList;
 %column
 %char
 %eofval{
-	return null;
+    return null;
 %eofval}
-
 
 LETRA = [a-zA-Z]
 DIGITO = [0-9]
@@ -58,91 +56,93 @@ CONST_HEX = \((DIGITO|[A-F]|[a-f])+,16\)
 
 <YYINITIAL> {
 
-	"if"			{agregarToken("PR_IF");}
+    "if"              {agregarToken("PR_IF");}
 
-	"endif"			{agregarToken("PR_ENDIF");}
+    "endif"           {agregarToken("PR_ENDIF");}
 
-	"repeat"			{agregarToken("PR_REPEAT");}
+    "repeat"          {agregarToken("PR_REPEAT");}
 
-	"until"			{agregarToken("PR_UNTIL");}
+    "until"           {agregarToken("PR_UNTIL");}
 
-	"write"			{agregarToken("PR_WRITE");}
+    "write"           {agregarToken("PR_WRITE");}
 
-	"minimo"			{agregarToken("PR_MINIMO");}
+    "minimo"          {agregarToken("PR_MINIMO");}
 
-	"maximo"			{agregarToken("PR_MAXIMO");}
+    "maximo"          {agregarToken("PR_MAXIMO");}
 
-	"define"			{agregarToken("PR_DEFINE");}
+    "define"          {agregarToken("PR_DEFINE");}
 
-	"enddefine"			{agregarToken("PR_ENDDEFINE");}
+    "enddefine"       {agregarToken("PR_ENDDEFINE");}
 
-	"program"			{agregarToken("PR_PROGRAM");}
+    "program"         {agregarToken("PR_PROGRAM");}
 
-	"end"			{agregarToken("PR_END");}
+    "end"             {agregarToken("PR_END");}
 
-	"and"			{agregarToken("PR_AND");}
+    "and"             {agregarToken("PR_AND");}
 
-	"or"			{agregarToken("PR_OR");}
+    "or"              {agregarToken("PR_OR");}
 
-	{ESPACIO}		{System.out.println("espacio");}
+    {ESPACIO}         {System.out.println("espacio");}
 
-	{ID}			{agregarToken("ID");}
+    {ID}              {agregarToken("ID");}
 
-	{CONST_STRING}	{agregarToken("CONST_STRING");}
+    {CONST_STRING}    {agregarToken("CONST_STRING");}
 
-	{CONST_INT}		{agregarToken("CONST_INT");}
+    {CONST_INT}       {agregarToken("CONST_INT");}
 
-	{CONST_FLOAT}	{agregarToken("CONST_FLOAT");}
+    {CONST_FLOAT}     {agregarToken("CONST_FLOAT");}
 
-	{CONST_BIN}		{agregarToken("CONST_BIN");}
+    {CONST_BIN}       {agregarToken("CONST_BIN");}
 
-	{CONST_HEX}		{agregarToken("CONST_HEX");}
+    {CONST_HEX}       {agregarToken("CONST_HEX");}
 
-	{COMMENT}		{System.out.println("COMMENT");}
+    {COMMENT}         {System.out.println("COMMENT");}
 
-	":="			{agregarToken("ASSIGN");}
+    ":="              {agregarToken("ASSIGN");}
 
-	"+"				{agregarToken("OP_SUM");}
+    "+"               {agregarToken("OP_SUM");}
 
-	"-"				{agregarToken("OP_RESTA");}
+    "-"               {agregarToken("OP_RESTA");}
 
-	"*"				{agregarToken("OP_MULT");}
+    "*"               {agregarToken("OP_MULT");}
 
-	"/"				{agregarToken("OP_DIV");}
+    "/"               {agregarToken("OP_DIV");}
 
-	"<>"			{agregarToken("OP_DIFF");}
+    "<>"              {agregarToken("OP_DIFF");}
 
-	"<"				{agregarToken("OP_LT");}
+    "<"               {agregarToken("OP_LT");}
 
-	">"				{agregarToken("OP_GT");}
+    ">"               {agregarToken("OP_GT");}
 
-	"<="			{agregarToken("OP_LE");}
+    "<="              {agregarToken("OP_LE");}
 
-	">="			{agregarToken("OP_GE");}
+    ">="              {agregarToken("OP_GE");}
 
-	"=="			{agregarToken("OP_EQ");}
+    "=="              {agregarToken("OP_EQ");}
 
-	"["				{agregarToken("LS_ABRIR");}
+    "["               {agregarToken("LS_ABRIR");}
 
-	"]"				{agregarToken("LS_CERRAR");}
+    "]"               {agregarToken("LS_CERRAR");}
 
-	"{"				{agregarToken("BL_ABRIR");}
+    "{"               {agregarToken("BL_ABRIR");}
 
-	"}"				{agregarToken("BL_CERRAR");}
+    "}"               {agregarToken("BL_CERRAR");}
 
-	"("				{agregarToken("PAREN_ABRIR");}
+    "("               {agregarToken("PAREN_ABRIR");}
 
-	")"				{agregarToken("PAREN_CERRAR");}
+    ")"               {agregarToken("PAREN_CERRAR");}
 
-	","				{agregarToken("COMA");}
+    ","               {agregarToken("COMA");}
 
-	":"				{agregarToken("DOSP");}
+    ":"               {agregarToken("DOSP");}
 
-	";"				{agregarToken("PYC");}
+    ";"               {agregarToken("PYC");}
 
-	{TAB}			{System.out.println("tab");}
-	{FORM_FEED}		{System.out.println("FORM_FEED");}
-	{ENTER}			{System.out.println("ENTER");}
+    {TAB}             {System.out.println("tab");}
+
+    {FORM_FEED}       {System.out.println("FORM_FEED");}
+
+    {ENTER}           {System.out.println("ENTER");}
 }
 
-[^]					{agregarError(); }
+[^]                   {agregarError(); }

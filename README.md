@@ -90,7 +90,7 @@ program
     } endif
   } until (contador == 5);
 
-  write(maximo([1,5,8])); /* Devuelve 1 */
-  write(minimo([1,5,8])); /* Devuelve 8 */
+  write(maximo([1,5,8])); /* Devuelve 8 */
+  write(minimo([1,5,8])); /* Devuelve 1 */
 end
 ```
