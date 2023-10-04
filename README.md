@@ -4,7 +4,7 @@
 
 Consiste en la implementación en Java de un analizador lexicográfico para un lenguaje inventado por nosotros. Usamos [JFlex](https://www.jflex.de/) para generar una clase llamada [Lexico.java](src/ar/edu/unlu/teocomp1/grupo3/Lexico.java), que se encarga de realizar el análisis. Este archivo se genera a partir de [TeoComp1Lexer.flex](TeoComp1Lexer.flex), donde se defininen las reglas lexicográficas del lenguaje.
 
-Para ejecutar el programa, se debe correr el método `main` de la clase [VentanaMain.java](VentanaMain.java).
+Para ejecutar el programa, se debe correr el método `main` de la clase [VentanaMain.java](src/ar/edu/unlu/teocomp1/grupo3/VentanaMain.java).
 
 ## Segunda entrega
 
