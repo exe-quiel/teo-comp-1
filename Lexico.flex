@@ -13,9 +13,9 @@ import java.util.ArrayList;
         resultados.add(new Resultado(token, this.yytext(), this.yyline, this.yycolumn, this.yychar, this.yylength()));
     }
 
-    private void agregarError(){
+    /*private void agregarError(){
         resultados.add(new Resultado(this.yytext(), this.yyline, this.yycolumn, this.yychar, this.yylength()));
-    } 
+    } */
 
     public List<Resultado> getResultados() {
         return resultados;
@@ -145,4 +145,4 @@ CONST_HEX = \((DIGITO|[A-F]|[a-f])+,16\)
     {ENTER}           {System.out.println("ENTER");}
 }
 
-[^]                   {agregarError(); }
+[^]                   {System.err.printf("ERROR: Lexema: %s | linea %s | Columna %s\n", this.yytext(), this.yyline, this.yycolumn);}

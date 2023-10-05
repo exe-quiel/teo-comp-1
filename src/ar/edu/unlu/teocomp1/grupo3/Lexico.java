@@ -346,20 +346,20 @@ public class Lexico implements java_cup.runtime.Scanner {
   private int zzFinalHighSurrogate = 0;
 
   /* user code: */
-	private List<Resultado>	resultados = new ArrayList<>();
-	
-	private void agregarToken(String token){
-		resultados.add(new Resultado(token, this.yytext(), this.yyline, this.yycolumn, this.yychar, this.yylength()));
-	}
-	
-	private void agregarError(){
-		resultados.add(new Resultado(this.yytext(), this.yyline, this.yycolumn, this.yychar, this.yylength()));
-	} 
+    private List<Resultado>    resultados = new ArrayList<>();
+    
+    private void agregarToken(String token){
+        resultados.add(new Resultado(token, this.yytext(), this.yyline, this.yycolumn, this.yychar, this.yylength()));
+    }
 
-	public List<Resultado> getResultados() {
-		return resultados;
-	}
-	
+    /*private void agregarError(){
+        resultados.add(new Resultado(this.yytext(), this.yyline, this.yycolumn, this.yychar, this.yylength()));
+    } */
+
+    public List<Resultado> getResultados() {
+        return resultados;
+    }
+
 
 
   /**
@@ -743,13 +743,13 @@ public class Lexico implements java_cup.runtime.Scanner {
       if (zzInput == YYEOF && zzStartRead == zzCurrentPos) {
         zzAtEOF = true;
             zzDoEOF();
-          { 	return null;
+          {     return null;
  }
       }
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1: 
-            { agregarError();
+            { System.err.printf("ERROR: Lexema: %s | linea %s | Columna %s\n", this.yytext(), this.yyline, this.yycolumn);
             } 
             // fall through
           case 46: break;

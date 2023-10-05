@@ -10,8 +10,11 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
@@ -31,6 +34,8 @@ import javax.swing.event.ListSelectionListener;
 
 public class VentanaMain extends JFrame {
 
+	private final static List<String> CONSTANT_LITERAL_TOKENS = Arrays.asList("CONST_STRING", "CONST_INT", "CONST_FLOAT", "CONST_BIN", "CONST_HEX");
+	
 	private JPanel contentPane;
 
 	public static void main(String[] args) {
@@ -146,6 +151,8 @@ public class VentanaMain extends JFrame {
 		JMenuItem menuItemAnalizar = new JMenuItem("Analizar");
 		menuItemAnalizar.addActionListener(new ActionListener() {
 
+
+
 			public void actionPerformed(ActionEvent e) {
 				procesarDatos();
 			}
@@ -160,11 +167,48 @@ public class VentanaMain extends JFrame {
 					listModel.clear();
 
 					// TODO Acá deberíamos crear el archivo de la tabla de símbolos
+					String archivoTexto = "ts.txt";
+					
+			        try {
+			            // Crear un objeto FileWriter para escribir en el archivo
+			            FileWriter writer = new FileWriter(archivoTexto);
+			            
+			            // Encabezados de la tabla
+			            writer.write("NOMBRE          TOKEN           TIPO            VALOR           LONG\n");
+			            writer.write("--------------------------------------------------------------------\n");
+			            
+			            for (Resultado resultado : lexer.getResultados()) {
+			            	// Actualiza el modelo de la lista con los resultados
+							listModel.addElement(resultado);
+							
+			            	String nombre = resultado.getLexema();
+			            	int longitud = -1;
+			            	if (CONSTANT_LITERAL_TOKENS.contains(resultado.getToken())) nombre = "_" + nombre;
+			            	if (resultado.getToken().equals("CONST_STRING")) longitud = resultado.getLexema().length()-2;
+			            	
+			            	String fila = String.format("%-15s %-15s %-15s %-15s %-15s\n",
+			                        nombre,
+			                        resultado.getToken(),
+			                        "---",
+			                        resultado.getLexema(),
+			                        longitud == -1 ? "---" : longitud
+			            		);
+			                writer.write(fila);
+			            	
+			            	/*String fila = nombre + "\t" + resultado.getToken() + "\t" + "---" + "\t"
+			                        + resultado.getLexema() + "\t" + resultado.getTamanio() + "\n";
+			                writer.write(fila);
+			                */
+			            }
 
-					for (Resultado resultado : lexer.getResultados()) {
-						// Actualiza el modelo de la lista con los resultados
-						listModel.addElement(resultado);
-					}
+			            // Cerrar el FileWriter
+			            writer.close();
+
+			            System.out.println("El archivo se ha creado exitosamente.");
+			        } catch (IOException e) {
+			            e.printStackTrace();
+			        }
+
 				} catch (IOException e) {
 					System.err.println("Se produjo un error: " + e);
 				}
