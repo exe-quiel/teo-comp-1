@@ -3,5 +3,6 @@
 .classpath
 bin/*
 jflex-full-1.7.0.jar
+java-cup-11b-runtime_2.jar
 /bin/
 *.bat
