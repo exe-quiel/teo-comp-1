@@ -14,7 +14,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
@@ -34,8 +36,8 @@ import javax.swing.event.ListSelectionListener;
 
 public class VentanaMain extends JFrame {
 
-	private final static List<String> CONSTANT_LITERAL_TOKENS = Arrays.asList("CONST_STRING", "CONST_INT", "CONST_FLOAT", "CONST_BIN", "CONST_HEX");
-	
+	private static final List<String> CONSTANT_LITERAL_TOKENS = Arrays.asList("CONST_STRING", "CONST_INT", "CONST_FLOAT", "CONST_BIN", "CONST_HEX");
+	private static final List<String> TOKENS_TABLA_SIMBOLO = Arrays.asList("ID", "CONST_STRING", "CONST_INT", "CONST_FLOAT", "CONST_HEX", "CONST_BIN");
 	private JPanel contentPane;
 
 	public static void main(String[] args) {
@@ -177,24 +179,28 @@ public class VentanaMain extends JFrame {
 			            writer.write("NOMBRE          TOKEN           TIPO            VALOR           LONG\n");
 			            writer.write("--------------------------------------------------------------------\n");
 			            
+			            Set<String> tokensYaIncluidos = new HashSet<String>();
+			            
 			            for (Resultado resultado : lexer.getResultados()) {
 			            	// Actualiza el modelo de la lista con los resultados
 							listModel.addElement(resultado);
 							
-			            	String nombre = resultado.getLexema();
-			            	int longitud = -1;
-			            	if (CONSTANT_LITERAL_TOKENS.contains(resultado.getToken())) nombre = "_" + nombre;
-			            	if (resultado.getToken().equals("CONST_STRING")) longitud = resultado.getLexema().length()-2;
-			            	
-			            	String fila = String.format("%-15s %-15s %-15s %-15s %-15s\n",
-			                        nombre,
-			                        resultado.getToken(),
-			                        "---",
-			                        resultado.getLexema(),
-			                        longitud == -1 ? "---" : longitud
-			            		);
-			                writer.write(fila);
-			            	
+							if (TOKENS_TABLA_SIMBOLO.contains(resultado.getToken()) && !tokensYaIncluidos.contains(resultado.getLexema())) {
+				            	String nombre = resultado.getLexema();
+				            	tokensYaIncluidos.add(nombre);
+				            	int longitud = -1;
+				            	if (CONSTANT_LITERAL_TOKENS.contains(resultado.getToken())) nombre = "_" + nombre;
+				            	if (resultado.getToken().equals("CONST_STRING")) longitud = resultado.getLexema().length()-2;
+				            	
+				            	String fila = String.format("%-15s %-15s %-15s %-15s %-15s\n",
+				                        nombre,
+				                        resultado.getToken(),
+				                        "---",
+				                        resultado.getLexema(),
+				                        longitud == -1 ? "---" : longitud
+				            		);
+				                writer.write(fila);
+							}
 			            	/*String fila = nombre + "\t" + resultado.getToken() + "\t" + "---" + "\t"
 			                        + resultado.getLexema() + "\t" + resultado.getTamanio() + "\n";
 			                writer.write(fila);

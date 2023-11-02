@@ -81,16 +81,29 @@ CONST_HEX = \((DIGITO|[A-F]|[a-f])+,16\)
     "and"             {agregarToken("PR_AND");}
 
     "or"              {agregarToken("PR_OR");}
+    
+    "int"              {agregarToken("PR_INT");}
+    
+    "str"              {agregarToken("PR_STR");}
+    
+    "float"              {agregarToken("PR_FLOAT");}
 
     {ESPACIO}         {System.out.println("espacio");}
 
     {ID}              {agregarToken("ID");}
 
-    {CONST_STRING}    {agregarToken("CONST_STRING");}
+    {CONST_STRING}    {if (this.yylength() <= 32) agregarToken("CONST_STRING");
+    					else System.err.printf ("ERROR: Se encontro string con %s caracteres \n", this.yylength()-2);}
 
-    {CONST_INT}       {agregarToken("CONST_INT");}
+    {CONST_INT}       {if (Integer.parseInt(this.yytext()) < 65536) agregarToken("CONST_INT");
+    					else System.err.printf ("ERROR: Se encontro int mayor a 16 bits: %s \n", this.yytext());}
 
-    {CONST_FLOAT}     {agregarToken("CONST_FLOAT");}
+    {CONST_FLOAT}     {try {
+    					Float.parseFloat(this.yytext()); agregarToken("CONST_FLOAT");
+    				   } catch (NumberFormatException e){ 
+    				   	System.err.printf ("ERROR: Se encontro float invalido: %s \n", this.yytext());
+    				   }
+    				  }
 
     {CONST_BIN}       {agregarToken("CONST_BIN");}
 
