@@ -1,0 +1,106 @@
+package ar.edu.unlu.teocomp1.grupo3;
+
+import java_cup.runtime.*;
+import java.util.List;
+import java.util.ArrayList;
+
+parser code
+{:
+    public void syntax_error(Symbol symbol) {
+        System.out.println("Error en la línea " + (symbol.right + 1) + " columna " + symbol.left + ", " + symbol + " no reconocido, valor " + symbol.value);
+    }
+
+    private List<String> reglas = new ArrayList<>();
+
+    private void agregarRegla(String mensaje) {
+        reglas.add(mensaje);
+    }
+:}
+
+action code
+{:
+
+:}
+
+terminal PR_IF, PR_ELSE, PR_ENDIF, PR_REPEAT, PR_UNTIL, PR_WRITE, PR_MINIMO, PR_MAXIMO, PR_DEFINE, PR_ENDDEFINE, PR_PROGRAM, PR_END, PR_AND, PR_OR, PR_INT, PR_STR, PR_FLOAT, ID, CONST_STRING, CONST_INT, CONST_FLOAT, CONST_BIN, CONST_HEX, ASSIGN, OP_SUM, OP_RESTA, OP_MULT, OP_DIV, OP_DIFF, OP_LT, OP_GT, OP_LE, OP_GE, OP_EQ, LS_ABRIR, LS_CERRAR, BL_ABRIR, BL_CERRAR, PAREN_ABRIR, PAREN_CERRAR, COMA, DOSP, PYC;
+
+non terminal codigo, define, program, programSinVar, programaSinVar, listaDeclaraciones, tipo, declaraciones, declaracion, programa, sentencia, variables, asignacion, seleccion, iteracion, condicion, comparacion, comparador, expresion, termino, factor, constante, lista, elementoLista, callWrite, callMax, callMin;
+
+start with codigo;
+
+codigo ::= define program {: agregarRegla("Regla 0"); :};
+codigo ::= programSinVar:psv {: agregarRegla("Regla 0"); RESULT = ((String) psv); :};
+
+define ::= PR_DEFINE listaDeclaraciones PR_ENDDEFINE {: agregarRegla("Regla 1"); :};
+listaDeclaraciones ::= declaraciones {: agregarRegla("Regla 2"); :};
+listaDeclaraciones ::= listaDeclaraciones declaraciones {: agregarRegla("Regla 3"); :};
+
+tipo ::= PR_INT:cint {: agregarRegla("Regla 4"); RESULT = cint; :}
+    | PR_STR:cstr {: agregarRegla("Regla 5"); RESULT = cstr; :}
+    | PR_FLOAT:cfloat {: agregarRegla("Regla 6"); RESULT = cfloat; :};
+
+declaraciones ::= OP_LT declaracion OP_GT {: agregarRegla("Regla 7"); :};
+declaracion ::= tipo OP_GT DOSP OP_LT ID {: agregarRegla("Regla 8"); :};
+declaracion ::= tipo COMA declaracion COMA ID{: agregarRegla("Regla 9"); :};
+
+program ::= PR_PROGRAM programa PR_END {: agregarRegla("Regla 10"); :};
+programa ::= sentencia PYC {: agregarRegla("Regla 11"); :};
+programa ::= programa sentencia PYC {: agregarRegla("Regla 12"); :};
+
+programSinVar ::= PR_PROGRAM:pgrm programaSinVar:psv PR_END:prend {: agregarRegla("Regla 13"); RESULT = ((String) pgrm) + ((String) psv) + ((String) prend); :};
+programaSinVar ::= PR_WRITE:prwrite CONST_STRING:cstr PYC:pyc {: agregarRegla("Regla 14"); RESULT = ((String) prwrite) + ((String) cstr) + ((String) pyc); :};
+programaSinVar ::= programaSinVar:psv PR_WRITE:prwrite CONST_STRING:cstr PYC:pyc {: agregarRegla("Regla 15"); /*RESULT = ((String) psv) + ((String) prwrite) + ((String) cstr) + ((String) pyc);*/ :};
+
+sentencia ::= asignacion {: agregarRegla("Regla 16"); :}
+    | iteracion {: agregarRegla("Regla 17"); :}
+    | seleccion {: agregarRegla("Regla 18"); :}
+    | callWrite {: agregarRegla("Regla 19"); :};
+
+variables ::= ID ASSIGN {: agregarRegla("Regla 20"); :}
+    | variables ID ASSIGN {: agregarRegla("Regla 21"); :};
+
+asignacion ::= variables expresion {: agregarRegla("Regla 22"); :};
+asignacion ::= variables CONST_STRING {: agregarRegla("Regla 23"); :};
+
+seleccion ::= PR_IF condicion BL_ABRIR programa BL_CERRAR PR_ENDIF {: agregarRegla("Regla 24"); :};
+seleccion ::= PR_IF condicion BL_ABRIR programa BL_CERRAR PR_ELSE BL_ABRIR programa BL_CERRAR PR_ENDIF {: agregarRegla("Regla 25"); :};
+
+iteracion ::= PR_REPEAT BL_ABRIR programa BL_CERRAR PR_UNTIL PAREN_ABRIR condicion PAREN_CERRAR {: agregarRegla("Regla 26"); :};
+
+condicion ::= comparacion {: agregarRegla("Regla 27"); :};
+condicion ::= comparacion PR_AND comparacion {: agregarRegla("Regla 28"); :};
+condicion ::= comparacion PR_OR comparacion {: agregarRegla("Regla 29"); :};
+
+comparacion ::= expresion comparador expresion {: agregarRegla("Regla 30"); :};
+comparador ::= OP_GE {: agregarRegla("Regla 31"); :}
+    | OP_LE {: agregarRegla("Regla 32"); :}
+    | OP_LT {: agregarRegla("Regla 33"); :}
+    | OP_GT {: agregarRegla("Regla 34"); :}
+    | OP_EQ {: agregarRegla("Regla 35"); :}
+    | OP_DIFF {: agregarRegla("Regla 36"); :};
+
+expresion ::= expresion OP_SUM termino {: agregarRegla("Regla 37"); :};
+expresion ::= expresion OP_RESTA termino {: agregarRegla("Regla 38"); :};
+expresion ::= termino {: agregarRegla("Regla 39"); :};
+termino ::= termino OP_MULT factor {: agregarRegla("Regla 40"); :}
+    | termino OP_DIV factor {: agregarRegla("Regla 41"); :}
+    | factor {: agregarRegla("Regla 42"); :};
+factor ::= PAREN_ABRIR expresion PAREN_CERRAR | ID | constante {: agregarRegla("Regla 43"); :};
+factor ::= callMin | callMax {: agregarRegla("Regla 44"); :};
+
+constante ::= CONST_INT {: agregarRegla("Regla 45"); :}
+    | CONST_FLOAT {: agregarRegla("Regla 46"); :}
+    | CONST_HEX {: agregarRegla("Regla 47"); :}
+    | CONST_BIN {: agregarRegla("Regla 48"); :};
+
+lista ::= LS_ABRIR elementoLista LS_CERRAR {: agregarRegla("Regla 49"); :};
+elementoLista ::= elementoLista COMA expresion {: agregarRegla("Regla 50"); :}
+    | expresion {: agregarRegla("Regla 51"); :};
+
+callWrite ::= PR_WRITE constante {: agregarRegla("Regla 52"); :}
+	| PR_WRITE CONST_STRING {: agregarRegla("Regla 53"); :}
+	| PR_WRITE ID {: agregarRegla("Regla 54"); :};
+callMin ::= PR_MINIMO LS_ABRIR LS_CERRAR {: agregarRegla("Regla 55"); :};
+callMin ::= PR_MINIMO lista {: agregarRegla("Regla 56"); :};
+callMax ::= PR_MAXIMO LS_ABRIR LS_CERRAR {: agregarRegla("Regla 57"); :};
+callMax ::= PR_MAXIMO lista {: agregarRegla("Regla 58"); :};

@@ -1,0 +1,26 @@
+define
+  <str, str> : <string, str_vacio>
+  <int> : <contador>
+  <int> : <bin_var>
+  <int> : <hex_var>
+enddefine
+
+program
+  string := "hola-?";
+  bin_var := (10,2);
+  hex_var := (af,16);
+  str_vacio := "";
+
+  contador := 0;
+  repeat {
+    contador := contador + 1;
+    if contador <> 2 {
+      write contador;
+    } endif;
+  } until (contador == 5);
+
+  max := maximo [1,5,8]; /* Devuelve 1 */
+  min := minimo [1,5,8]; /* Devuelve 8 */
+  write max;
+  write min;
+end

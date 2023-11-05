@@ -1,6 +1,6 @@
 package ar.edu.unlu.teocomp1.grupo3;
 
-import java_cup.runtime.Symbol;
+import java_cup.runtime.*;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -23,16 +23,12 @@ import java.util.ArrayList;
 
 %}
 
-/*%cupsym Simbolo*/
 %cup
 %public
 %class Lexico
 %line
 %column
 %char
-%eofval{
-    return null;
-%eofval}
 
 LETRA = [a-zA-Z]
 DIGITO = [0-9]
@@ -56,100 +52,117 @@ CONST_HEX = \((DIGITO|[A-F]|[a-f])+,16\)
 
 <YYINITIAL> {
 
-    "if"              {agregarToken("PR_IF");}
+    "if"              {agregarToken("PR_IF"); return new Symbol(sym.PR_IF, this.yytext());}
 
-    "endif"           {agregarToken("PR_ENDIF");}
+    "else"              {agregarToken("PR_ELSE"); return new Symbol(sym.PR_ELSE, this.yytext());}
 
-    "repeat"          {agregarToken("PR_REPEAT");}
+    "endif"           {agregarToken("PR_ENDIF"); return new Symbol(sym.PR_ENDIF, this.yytext());}
 
-    "until"           {agregarToken("PR_UNTIL");}
+    "repeat"          {agregarToken("PR_REPEAT"); return new Symbol(sym.PR_REPEAT, this.yytext());}
 
-    "write"           {agregarToken("PR_WRITE");}
+    "until"           {agregarToken("PR_UNTIL"); return new Symbol(sym.PR_UNTIL, this.yytext());}
 
-    "minimo"          {agregarToken("PR_MINIMO");}
+    "write"           {agregarToken("PR_WRITE"); return new Symbol(sym.PR_WRITE, this.yytext());}
 
-    "maximo"          {agregarToken("PR_MAXIMO");}
+    "minimo"          {agregarToken("PR_MINIMO"); return new Symbol(sym.PR_MINIMO, this.yytext());}
 
-    "define"          {agregarToken("PR_DEFINE");}
+    "maximo"          {agregarToken("PR_MAXIMO"); return new Symbol(sym.PR_MAXIMO, this.yytext());}
 
-    "enddefine"       {agregarToken("PR_ENDDEFINE");}
+    "define"          {agregarToken("PR_DEFINE"); return new Symbol(sym.PR_DEFINE, this.yytext());}
 
-    "program"         {agregarToken("PR_PROGRAM");}
+    "enddefine"       {agregarToken("PR_ENDDEFINE"); return new Symbol(sym.PR_ENDDEFINE, this.yytext());}
 
-    "end"             {agregarToken("PR_END");}
+    "program"         {agregarToken("PR_PROGRAM"); return new Symbol(sym.PR_PROGRAM, this.yytext());}
 
-    "and"             {agregarToken("PR_AND");}
+    "end"             {agregarToken("PR_END"); return new Symbol(sym.PR_END, this.yytext());}
 
-    "or"              {agregarToken("PR_OR");}
+    "and"             {agregarToken("PR_AND"); return new Symbol(sym.PR_AND, this.yytext());}
+
+    "or"              {agregarToken("PR_OR"); return new Symbol(sym.PR_OR, this.yytext());}
     
-    "int"              {agregarToken("PR_INT");}
+    "int"             {agregarToken("PR_INT"); return new Symbol(sym.PR_INT, this.yytext());}
     
-    "str"              {agregarToken("PR_STR");}
+    "str"             {agregarToken("PR_STR"); return new Symbol(sym.PR_STR, this.yytext());}
     
-    "float"              {agregarToken("PR_FLOAT");}
+    "float"           {agregarToken("PR_FLOAT"); return new Symbol(sym.PR_FLOAT, this.yytext());}
 
     {ESPACIO}         {System.out.println("espacio");}
 
-    {ID}              {agregarToken("ID");}
+    {ID}              {agregarToken("ID"); return new Symbol(sym.ID, this.yytext());}
 
-    {CONST_STRING}    {if (this.yylength() <= 32) agregarToken("CONST_STRING");
-    					else System.err.printf ("ERROR: Se encontro string con %s caracteres \n", this.yylength()-2);}
+    {CONST_STRING}    {
+                       if (this.yylength() <= 32) {
+                           agregarToken("CONST_STRING");
+                           return new Symbol(sym.CONST_STRING, this.yytext());
+                       } else {
+                           System.err.printf ("ERROR: Se encontro string con %s caracteres \n", this.yylength()-2);
+                       }
+                      }
 
-    {CONST_INT}       {if (Integer.parseInt(this.yytext()) < 65536) agregarToken("CONST_INT");
-    					else System.err.printf ("ERROR: Se encontro int mayor a 16 bits: %s \n", this.yytext());}
+    {CONST_INT}       {
+                       if (Integer.parseInt(this.yytext()) < 65536) {
+                           agregarToken("CONST_INT");
+                           return new Symbol(sym.CONST_INT, this.yytext());
+                       } else {
+                           System.err.printf ("ERROR: Se encontro int mayor a 16 bits: %s \n", this.yytext());
+                       }
+                      }
 
-    {CONST_FLOAT}     {try {
-    					Float.parseFloat(this.yytext()); agregarToken("CONST_FLOAT");
-    				   } catch (NumberFormatException e){ 
-    				   	System.err.printf ("ERROR: Se encontro float invalido: %s \n", this.yytext());
-    				   }
-    				  }
+    {CONST_FLOAT}     {
+                       try {
+                           Float.parseFloat(this.yytext());
+                           agregarToken("CONST_FLOAT");
+                           return new Symbol(sym.CONST_FLOAT, this.yytext());
+                       } catch (NumberFormatException e){ 
+                           System.err.printf ("ERROR: Se encontro float invalido: %s \n", this.yytext());
+                       }
+                      }
 
-    {CONST_BIN}       {agregarToken("CONST_BIN");}
+    {CONST_BIN}       {agregarToken("CONST_BIN"); return new Symbol(sym.CONST_BIN, this.yytext());}
 
-    {CONST_HEX}       {agregarToken("CONST_HEX");}
+    {CONST_HEX}       {agregarToken("CONST_HEX"); return new Symbol(sym.CONST_HEX, this.yytext());}
 
     {COMMENT}         {System.out.println("COMMENT");}
 
-    ":="              {agregarToken("ASSIGN");}
+    ":="              {agregarToken("ASSIGN"); return new Symbol(sym.ASSIGN, this.yytext());}
 
-    "+"               {agregarToken("OP_SUM");}
+    "+"               {agregarToken("OP_SUM"); return new Symbol(sym.OP_SUM, this.yytext());}
 
-    "-"               {agregarToken("OP_RESTA");}
+    "-"               {agregarToken("OP_RESTA"); return new Symbol(sym.OP_RESTA, this.yytext());}
 
-    "*"               {agregarToken("OP_MULT");}
+    "*"               {agregarToken("OP_MULT"); return new Symbol(sym.OP_MULT, this.yytext());}
 
-    "/"               {agregarToken("OP_DIV");}
+    "/"               {agregarToken("OP_DIV"); return new Symbol(sym.OP_DIV, this.yytext());}
 
-    "<>"              {agregarToken("OP_DIFF");}
+    "<>"              {agregarToken("OP_DIFF"); return new Symbol(sym.OP_DIFF, this.yytext());}
 
-    "<"               {agregarToken("OP_LT");}
+    "<"               {agregarToken("OP_LT"); return new Symbol(sym.OP_LT, this.yytext());}
 
-    ">"               {agregarToken("OP_GT");}
+    ">"               {agregarToken("OP_GT"); return new Symbol(sym.OP_GT, this.yytext());}
 
-    "<="              {agregarToken("OP_LE");}
+    "<="              {agregarToken("OP_LE"); return new Symbol(sym.OP_LE, this.yytext());}
 
-    ">="              {agregarToken("OP_GE");}
+    ">="              {agregarToken("OP_GE"); return new Symbol(sym.OP_GE, this.yytext());}
 
-    "=="              {agregarToken("OP_EQ");}
+    "=="              {agregarToken("OP_EQ"); return new Symbol(sym.OP_EQ, this.yytext());}
 
-    "["               {agregarToken("LS_ABRIR");}
+    "["               {agregarToken("LS_ABRIR"); return new Symbol(sym.LS_ABRIR, this.yytext());}
 
-    "]"               {agregarToken("LS_CERRAR");}
+    "]"               {agregarToken("LS_CERRAR"); return new Symbol(sym.LS_CERRAR, this.yytext());}
 
-    "{"               {agregarToken("BL_ABRIR");}
+    "{"               {agregarToken("BL_ABRIR"); return new Symbol(sym.BL_ABRIR, this.yytext());}
 
-    "}"               {agregarToken("BL_CERRAR");}
+    "}"               {agregarToken("BL_CERRAR"); return new Symbol(sym.BL_CERRAR, this.yytext());}
 
-    "("               {agregarToken("PAREN_ABRIR");}
+    "("               {agregarToken("PAREN_ABRIR"); return new Symbol(sym.PAREN_ABRIR, this.yytext());}
 
-    ")"               {agregarToken("PAREN_CERRAR");}
+    ")"               {agregarToken("PAREN_CERRAR"); return new Symbol(sym.PAREN_CERRAR, this.yytext());}
 
-    ","               {agregarToken("COMA");}
+    ","               {agregarToken("COMA"); return new Symbol(sym.COMA, this.yytext());}
 
-    ":"               {agregarToken("DOSP");}
+    ":"               {agregarToken("DOSP"); return new Symbol(sym.DOSP, this.yytext());}
 
-    ";"               {agregarToken("PYC");}
+    ";"               {agregarToken("PYC"); return new Symbol(sym.PYC, this.yytext());}
 
     {TAB}             {System.out.println("tab");}
 

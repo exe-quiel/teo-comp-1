@@ -8,17 +8,22 @@ import java.io.InputStreamReader;
 
 public class ConsolaMain {
 
-	 /*
-	 public static void main(String[] args) throws IOException {
-		InputStream inputStream = null;
-		inputStream = new FileInputStream(new File("input.txt"));
-		InputStreamReader inputReader = new InputStreamReader(inputStream);
-		Lexico lexico = new Lexico(inputReader);
-		lexico.next_token();
-		for (Resultado resultado : lexico.getResultados()) {
-			System.out.println(resultado.getLexema());
+    public static void main(String[] args) throws IOException {
+        InputStream inputStream = null;
+        inputStream = new FileInputStream(new File("original_prueba.txt"));
+        InputStreamReader inputReader = new InputStreamReader(inputStream);
+        Lexico lexico = new Lexico(inputReader);
+        /*lexico.next_token();
+        for (Resultado resultado : lexico.getResultados()) {
+            System.out.println(resultado.getLexema());
+        }*/
+        parser parser = new parser(lexico);
+        try {
+			parser.parse();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		System.out.println("Todo OK");
-	}
-	*/
+        System.out.println("Todo OK");
+    }
 }
