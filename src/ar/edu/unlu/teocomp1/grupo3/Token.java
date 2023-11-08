@@ -1,6 +1,6 @@
 package ar.edu.unlu.teocomp1.grupo3;
 
-public class Resultado {
+public class Token {
 	private String lexema;
 	private String token;
 	private int linea;
@@ -8,12 +8,12 @@ public class Resultado {
 	private int inicio;
 	private int tamanio;
 
-	public Resultado(String token, String lexema, int linea, int columna, int inicio, int tamanio) {
+	public Token(String token, String lexema, int linea, int columna, int inicio, int tamanio) {
 		this(lexema, linea, columna, inicio, tamanio);
 		this.token = token;
 	}
 
-	public Resultado(String lexema, int linea, int columna, int inicio, int tamanio) {
+	public Token(String lexema, int linea, int columna, int inicio, int tamanio) {
 		this.lexema = lexema;
 		this.linea = linea;
 		this.columna = columna;

@@ -7,18 +7,18 @@ import java.util.ArrayList;
 %%
 
 %{
-    private List<Resultado>    resultados = new ArrayList<>();
+    private List<Token> tokens = new ArrayList<>();
     
     private void agregarToken(String token){
-        resultados.add(new Resultado(token, this.yytext(), this.yyline, this.yycolumn, this.yychar, this.yylength()));
+        tokens.add(new Token(token, this.yytext(), this.yyline, this.yycolumn, this.yychar, this.yylength()));
     }
 
     /*private void agregarError(){
-        resultados.add(new Resultado(this.yytext(), this.yyline, this.yycolumn, this.yychar, this.yylength()));
+        tokens.add(new Token(this.yytext(), this.yyline, this.yycolumn, this.yychar, this.yylength()));
     } */
 
-    public List<Resultado> getResultados() {
-        return resultados;
+    public List<Token> getTokens() {
+        return tokens;
     }
 
 %}

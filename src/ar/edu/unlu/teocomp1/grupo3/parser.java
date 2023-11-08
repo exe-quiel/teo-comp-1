@@ -318,11 +318,16 @@ public class parser extends java_cup.runtime.lr_parser {
         System.out.println("Error en la línea " + (symbol.right + 1) + " columna " + symbol.left + ", " + symbol + " no reconocido, valor " + symbol.value);
     }
 
-    private List<String> reglas = new ArrayList<>();
+    private List<Regla> reglas = new ArrayList<>();
 
-    private void agregarRegla(String mensaje) {
-        reglas.add(mensaje);
+    private void agregarRegla(String numero) {
+        reglas.add(new Regla(numero));
     }
+    
+    public List<Regla> getReglas() {
+        return reglas;
+    }
+    
 
 
 /** Cup generated class to encapsulate user supplied action code.*/

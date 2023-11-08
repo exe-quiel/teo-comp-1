@@ -3,9 +3,7 @@ NOMBRE          TOKEN           TIPO            VALOR           LONG
 string          ID              ---             string          ---            
 str_vacio       ID              ---             str_vacio       ---            
 contador        ID              ---             contador        ---            
-bin             ID              ---             bin             ---            
 bin_var         ID              ---             bin_var         ---            
-hex             ID              ---             hex             ---            
 hex_var         ID              ---             hex_var         ---            
 _"hola-?"       CONST_STRING    ---             "hola-?"        6              
 _(10,2)         CONST_BIN       ---             (10,2)          ---            
@@ -15,4 +13,6 @@ _0              CONST_INT       ---             0               ---
 _1              CONST_INT       ---             1               ---            
 _2              CONST_INT       ---             2               ---            
 _5              CONST_INT       ---             5               ---            
+max             ID              ---             max             ---            
 _8              CONST_INT       ---             8               ---            
+min             ID              ---             min             ---            

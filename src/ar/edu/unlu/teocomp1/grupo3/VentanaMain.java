@@ -70,7 +70,7 @@ public class VentanaMain extends JFrame {
 		setContentPane(contentPane);
 
 		JTextArea textArea = new JTextArea();
-		contentPane.add(textArea, BorderLayout.CENTER);
+		contentPane.add(new JScrollPane(textArea), BorderLayout.CENTER);
 
 		// Lee el archivo línea por línea y coloca el contenido en el JTextArea.
 		JMenuItem menuItemAbrir = new JMenuItem("Abrir");
@@ -103,16 +103,16 @@ public class VentanaMain extends JFrame {
 
 		menuArchivo.add(menuItemAbrir);
 
-		DefaultListModel<Resultado> listModel = new DefaultListModel<>();
-		JList<Resultado> listaGuiResultados = new JList<>(listModel);
-		listaGuiResultados.setVisibleRowCount(20);
+		DefaultListModel<Token> tokensListModel  = new DefaultListModel<>();
+		JList<Token> listaGuiTokens = new JList<>(tokensListModel);
+		listaGuiTokens.setVisibleRowCount(15);
 
 		// Cada token se muestra como un JLabel que contiene la información de ese token
 		// (línea, columna, lexema y token)
-		listaGuiResultados.setCellRenderer(new ListCellRenderer<Resultado>() {
+		listaGuiTokens.setCellRenderer(new ListCellRenderer<Token>() {
 
 			@Override
-			public Component getListCellRendererComponent(JList<? extends Resultado> list, Resultado value, int index,
+			public Component getListCellRendererComponent(JList<? extends Token> list, Token value, int index,
 					boolean isSelected, boolean cellHasFocus) {
 
 				String texto = String.format("linea %d columna %d lexema {%s} token {%s}", value.getLinea(),
@@ -127,17 +127,39 @@ public class VentanaMain extends JFrame {
 
 		// Al hacer clic sobre un token en la lista de resultados,
 		// se selecciona el lexema correspondiente en el JTextArea
-		listaGuiResultados.addListSelectionListener(new ListSelectionListener() {
+		listaGuiTokens.addListSelectionListener(new ListSelectionListener() {
 
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				textArea.requestFocus();
-				Resultado resultado = listaGuiResultados.getSelectedValue();
+				Token resultado = listaGuiTokens.getSelectedValue();
 				textArea.select(resultado.getInicio(), resultado.getInicio() + resultado.getTamanio());
 			}
 		});
 
-		contentPane.add(new JScrollPane(listaGuiResultados), BorderLayout.SOUTH);
+		contentPane.add(new JScrollPane(listaGuiTokens), BorderLayout.SOUTH);
+		
+		DefaultListModel<Regla> reglasListModel = new DefaultListModel<>();
+		JList<Regla> listaGuiReglas = new JList<>(reglasListModel);
+		listaGuiReglas.setVisibleRowCount(20);
+		//listaGuiReglas.setSize(50,100);
+		contentPane.add(new JScrollPane(listaGuiReglas), BorderLayout.EAST);
+	
+		
+		listaGuiReglas.setCellRenderer(new ListCellRenderer<Regla>() {
+			@Override
+			public Component getListCellRendererComponent(JList<? extends Regla> list, Regla value, int index,
+					boolean isSelected, boolean cellHasFocus) {
+
+				String texto = value.getNumero();
+				JLabel label = new JLabel(texto);
+				
+				/*if (value.isError()) {
+					label.setForeground(Color.red);
+				} */
+				return label;
+			}
+		});
 
 		JMenu menuEditor = new JMenu("Editor");
 		menuBar.add(menuEditor);
@@ -165,8 +187,16 @@ public class VentanaMain extends JFrame {
 						InputStreamReader inputStreamReader = new InputStreamReader(byteArrayInputStream)) {
 					// Usar lexico
 					Lexico lexer = new Lexico(inputStreamReader);
-					lexer.next_token();
-					listModel.clear();
+					parser _parser = new parser(lexer);
+					//lexer.next_token();
+					try {
+						_parser.parse();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					tokensListModel.clear();
+					reglasListModel.clear();
 
 					// TODO Acá deberíamos crear el archivo de la tabla de símbolos
 					String archivoTexto = "ts.txt";
@@ -181,31 +211,30 @@ public class VentanaMain extends JFrame {
 			            
 			            Set<String> tokensYaIncluidos = new HashSet<String>();
 			            
-			            for (Resultado resultado : lexer.getResultados()) {
+			            for (Token token : lexer.getTokens()) {
 			            	// Actualiza el modelo de la lista con los resultados
-							listModel.addElement(resultado);
+							tokensListModel.addElement(token);
 							
-							if (TOKENS_TABLA_SIMBOLO.contains(resultado.getToken()) && !tokensYaIncluidos.contains(resultado.getLexema())) {
-				            	String nombre = resultado.getLexema();
+							if (TOKENS_TABLA_SIMBOLO.contains(token.getToken()) && !tokensYaIncluidos.contains(token.getLexema())) {
+				            	String nombre = token.getLexema();
 				            	tokensYaIncluidos.add(nombre);
 				            	int longitud = -1;
-				            	if (CONSTANT_LITERAL_TOKENS.contains(resultado.getToken())) nombre = "_" + nombre;
-				            	if (resultado.getToken().equals("CONST_STRING")) longitud = resultado.getLexema().length()-2;
+				            	if (CONSTANT_LITERAL_TOKENS.contains(token.getToken())) nombre = "_" + nombre;
+				            	if (token.getToken().equals("CONST_STRING")) longitud = token.getLexema().length()-2;
 				            	
 				            	String fila = String.format("%-15s %-15s %-15s %-15s %-15s\n",
 				                        nombre,
-				                        resultado.getToken(),
+				                        token.getToken(),
 				                        "---",
-				                        resultado.getLexema(),
+				                        token.getLexema(),
 				                        longitud == -1 ? "---" : longitud
 				            		);
 				                writer.write(fila);
-							}
-			            	/*String fila = nombre + "\t" + resultado.getToken() + "\t" + "---" + "\t"
-			                        + resultado.getLexema() + "\t" + resultado.getTamanio() + "\n";
-			                writer.write(fila);
-			                */
+							}	
 			            }
+			            for (Regla regla : _parser.getReglas()) {
+							reglasListModel.addElement(regla);
+						}
 
 			            // Cerrar el FileWriter
 			            writer.close();
