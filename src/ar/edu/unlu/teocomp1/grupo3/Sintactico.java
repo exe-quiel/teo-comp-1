@@ -8,6 +8,7 @@ package ar.edu.unlu.teocomp1.grupo3;
 import java_cup.runtime.*;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
 import java_cup.runtime.XMLElement;
 
 /** CUP v0.11b 20160615 (GIT 4ac7450) generated parser.
@@ -320,14 +321,58 @@ public class Sintactico extends java_cup.runtime.lr_parser {
 
     private List<Regla> reglas = new ArrayList<>();
 
+	private int indiceComienzoDeclaracion = 0;
+    private List<String> variables = new ArrayList<>();
+    private List<String> tipos = new ArrayList<>();
+
+	private void agregarVariable(Object variable) {
+        variables.add(variable.toString());
+    }
+
+	private void agregarTipo(Object tipo) {
+        tipos.add(tipo.toString());
+    }
+
     private void agregarRegla(String numero) {
         reglas.add(new Regla(numero));
     }
-    
+
+	private void agregarRegla(String numero, Object antecedente) {
+        reglas.add(new Regla(numero, antecedente.toString()));
+    }
+
+	private void actualizarIndice() {
+	    indiceComienzoDeclaracion = tipos.size();
+	}
+
+	private void ordenarTipos() {
+		System.out.println("indiceCom " + indiceComienzoDeclaracion);
+	    List<String> listaAOrdenar = tipos.subList(indiceComienzoDeclaracion, tipos.size());
+	    Collections.reverse(listaAOrdenar);
+	    int j = 0;
+	    for (int i = indiceComienzoDeclaracion; i < tipos.size(); i++) {
+	    	System.out.println("i " + i);
+	        tipos.set(i, listaAOrdenar.get(j++));
+	    }
+	}
+
+/*
+					  3    4    5
+	tipos [int, str, str, str, int]
+	laord [int, str, str]
+*/
+
     public List<Regla> getReglas() {
         return reglas;
     }
-    
+
+	public List<String> getVariables() {
+        return variables;
+    }
+
+	public List<String> getTipos() {
+        return tipos;
+    }
 
 
 /** Cup generated class to encapsulate user supplied action code.*/
@@ -388,7 +433,7 @@ class CUP$Sintactico$actions {
 		int psvleft = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()).left;
 		int psvright = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()).right;
 		Object psv = (Object)((java_cup.runtime.Symbol) CUP$Sintactico$stack.peek()).value;
-		 agregarRegla("Regla 0 - sin variables"); RESULT = ((String) psv); 
+		 RESULT = ((String) psv); agregarRegla("Regla 0 - sin variables", RESULT); 
               CUP$Sintactico$result = parser.getSymbolFactory().newSymbol("codigo",0, ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()), ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()), RESULT);
             }
           return CUP$Sintactico$result;
@@ -460,7 +505,7 @@ class CUP$Sintactico$actions {
           case 9: // declaraciones ::= OP_LT declaracion OP_GT 
             {
               Object RESULT =null;
-		 agregarRegla("Regla 7"); 
+		 agregarRegla("Regla 7"); ordenarTipos(); actualizarIndice(); 
               CUP$Sintactico$result = parser.getSymbolFactory().newSymbol("declaraciones",7, ((java_cup.runtime.Symbol)CUP$Sintactico$stack.elementAt(CUP$Sintactico$top-2)), ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()), RESULT);
             }
           return CUP$Sintactico$result;
@@ -469,7 +514,13 @@ class CUP$Sintactico$actions {
           case 10: // declaracion ::= tipo OP_GT DOSP OP_LT ID 
             {
               Object RESULT =null;
-		 agregarRegla("Regla 8"); 
+		int tleft = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.elementAt(CUP$Sintactico$top-4)).left;
+		int tright = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.elementAt(CUP$Sintactico$top-4)).right;
+		Object t = (Object)((java_cup.runtime.Symbol) CUP$Sintactico$stack.elementAt(CUP$Sintactico$top-4)).value;
+		int idleft = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()).left;
+		int idright = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()).right;
+		Object id = (Object)((java_cup.runtime.Symbol) CUP$Sintactico$stack.peek()).value;
+		 agregarRegla("Regla 8"); agregarTipo(t); agregarVariable(id); 
               CUP$Sintactico$result = parser.getSymbolFactory().newSymbol("declaracion",8, ((java_cup.runtime.Symbol)CUP$Sintactico$stack.elementAt(CUP$Sintactico$top-4)), ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()), RESULT);
             }
           return CUP$Sintactico$result;
@@ -478,7 +529,13 @@ class CUP$Sintactico$actions {
           case 11: // declaracion ::= tipo COMA declaracion COMA ID 
             {
               Object RESULT =null;
-		 agregarRegla("Regla 9"); 
+		int tleft = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.elementAt(CUP$Sintactico$top-4)).left;
+		int tright = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.elementAt(CUP$Sintactico$top-4)).right;
+		Object t = (Object)((java_cup.runtime.Symbol) CUP$Sintactico$stack.elementAt(CUP$Sintactico$top-4)).value;
+		int idleft = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()).left;
+		int idright = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()).right;
+		Object id = (Object)((java_cup.runtime.Symbol) CUP$Sintactico$stack.peek()).value;
+		 agregarRegla("Regla 9"); agregarTipo(t); agregarVariable(id); 
               CUP$Sintactico$result = parser.getSymbolFactory().newSymbol("declaracion",8, ((java_cup.runtime.Symbol)CUP$Sintactico$stack.elementAt(CUP$Sintactico$top-4)), ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()), RESULT);
             }
           return CUP$Sintactico$result;
@@ -523,7 +580,7 @@ class CUP$Sintactico$actions {
 		int prendleft = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()).left;
 		int prendright = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()).right;
 		Object prend = (Object)((java_cup.runtime.Symbol) CUP$Sintactico$stack.peek()).value;
-		 agregarRegla("Regla 13"); RESULT = ((String) pgrm) + ((String) psv) + ((String) prend); 
+		 RESULT = ((String) pgrm) + ((String) psv) + ((String) prend); agregarRegla("Regla 13", RESULT); 
               CUP$Sintactico$result = parser.getSymbolFactory().newSymbol("programSinVar",3, ((java_cup.runtime.Symbol)CUP$Sintactico$stack.elementAt(CUP$Sintactico$top-2)), ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()), RESULT);
             }
           return CUP$Sintactico$result;
@@ -541,7 +598,7 @@ class CUP$Sintactico$actions {
 		int pycleft = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()).left;
 		int pycright = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()).right;
 		Object pyc = (Object)((java_cup.runtime.Symbol) CUP$Sintactico$stack.peek()).value;
-		 agregarRegla("Regla 14"); RESULT = ((String) prwrite) + ((String) cstr) + ((String) pyc); 
+		 RESULT = ((String) prwrite) + ((String) cstr) + ((String) pyc); agregarRegla("Regla 14", RESULT); 
               CUP$Sintactico$result = parser.getSymbolFactory().newSymbol("programaSinVar",4, ((java_cup.runtime.Symbol)CUP$Sintactico$stack.elementAt(CUP$Sintactico$top-2)), ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()), RESULT);
             }
           return CUP$Sintactico$result;
@@ -562,7 +619,7 @@ class CUP$Sintactico$actions {
 		int pycleft = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()).left;
 		int pycright = ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()).right;
 		Object pyc = (Object)((java_cup.runtime.Symbol) CUP$Sintactico$stack.peek()).value;
-		 agregarRegla("Regla 15"); /*RESULT = ((String) psv) + ((String) prwrite) + ((String) cstr) + ((String) pyc);*/ 
+		 RESULT = ((String) psv) + ((String) prwrite) + ((String) cstr) + ((String) pyc); agregarRegla("Regla 15", RESULT); 
               CUP$Sintactico$result = parser.getSymbolFactory().newSymbol("programaSinVar",4, ((java_cup.runtime.Symbol)CUP$Sintactico$stack.elementAt(CUP$Sintactico$top-3)), ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()), RESULT);
             }
           return CUP$Sintactico$result;

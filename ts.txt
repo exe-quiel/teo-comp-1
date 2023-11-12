@@ -1,18 +1,18 @@
 NOMBRE          TOKEN           TIPO            VALOR           LONG
 --------------------------------------------------------------------
-string          ID              ---             string          ---            
-str_vacio       ID              ---             str_vacio       ---            
-contador        ID              ---             contador        ---            
-bin_var         ID              ---             bin_var         ---            
-hex_var         ID              ---             hex_var         ---            
+s1              ID              str             ---             ---            
+min             ID              int             ---             ---            
+max             ID              int             ---             ---            
+bin_var         ID              int             ---             ---            
+str_var         ID              str             ---             ---            
+contador        ID              int             ---             ---            
+hex_var         ID              int             ---             ---            
 _"hola-?"       CONST_STRING    ---             "hola-?"        6              
 _(10,2)         CONST_BIN       ---             (10,2)          ---            
 _(af,16)        CONST_HEX       ---             (af,16)         ---            
-_""             CONST_STRING    ---             ""              0              
+_"prueba"       CONST_STRING    ---             "prueba"        6              
 _0              CONST_INT       ---             0               ---            
 _1              CONST_INT       ---             1               ---            
 _2              CONST_INT       ---             2               ---            
 _5              CONST_INT       ---             5               ---            
-max             ID              ---             max             ---            
 _8              CONST_INT       ---             8               ---            
-min             ID              ---             min             ---            

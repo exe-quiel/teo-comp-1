@@ -4,6 +4,7 @@ package ar.edu.unlu.teocomp1.grupo3;
 import java_cup.runtime.*;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
 
 parser code
 {:
@@ -13,14 +14,52 @@ parser code
 
     private List<Regla> reglas = new ArrayList<>();
 
+	private int indiceComienzoDeclaracion = 0;
+    private List<String> variables = new ArrayList<>();
+    private List<String> tipos = new ArrayList<>();
+
+	private void agregarVariable(Object variable) {
+        variables.add(variable.toString());
+    }
+
+	private void agregarTipo(Object tipo) {
+        tipos.add(tipo.toString());
+    }
+
     private void agregarRegla(String numero) {
         reglas.add(new Regla(numero));
     }
-    
+
+	private void agregarRegla(String numero, Object antecedente) {
+        reglas.add(new Regla(numero, antecedente.toString()));
+    }
+
+	private void actualizarIndice() {
+	    indiceComienzoDeclaracion = tipos.size();
+	}
+
+	private void ordenarTipos() {
+		System.out.println("indiceCom " + indiceComienzoDeclaracion);
+	    List<String> listaAOrdenar = tipos.subList(indiceComienzoDeclaracion, tipos.size());
+	    Collections.reverse(listaAOrdenar);
+	    int j = 0;
+	    for (int i = indiceComienzoDeclaracion; i < tipos.size(); i++) {
+	    	System.out.println("i " + i);
+	        tipos.set(i, listaAOrdenar.get(j++));
+	    }
+	}
+
     public List<Regla> getReglas() {
         return reglas;
     }
-    
+
+	public List<String> getVariables() {
+        return variables;
+    }
+
+	public List<String> getTipos() {
+        return tipos;
+    }
 :}
 
 action code
@@ -35,7 +74,7 @@ non terminal codigo, define, program, programSinVar, programaSinVar, listaDeclar
 start with codigo;
 
 codigo ::= define program {: agregarRegla("Regla 0 - con variables"); :};
-codigo ::= programSinVar:psv {: agregarRegla("Regla 0 - sin variables"); RESULT = ((String) psv); :};
+codigo ::= programSinVar:psv {: RESULT = ((String) psv); agregarRegla("Regla 0 - sin variables", RESULT); :};
 
 define ::= PR_DEFINE listaDeclaraciones PR_ENDDEFINE {: agregarRegla("Regla 1"); :};
 listaDeclaraciones ::= declaraciones {: agregarRegla("Regla 2"); :};
@@ -45,17 +84,17 @@ tipo ::= PR_INT:cint {: agregarRegla("Regla 4"); RESULT = cint; :}
     | PR_STR:cstr {: agregarRegla("Regla 5"); RESULT = cstr; :}
     | PR_FLOAT:cfloat {: agregarRegla("Regla 6"); RESULT = cfloat; :};
 
-declaraciones ::= OP_LT declaracion OP_GT {: agregarRegla("Regla 7"); :};
-declaracion ::= tipo OP_GT DOSP OP_LT ID {: agregarRegla("Regla 8"); :};
-declaracion ::= tipo COMA declaracion COMA ID{: agregarRegla("Regla 9"); :};
+declaraciones ::= OP_LT declaracion OP_GT {: agregarRegla("Regla 7"); ordenarTipos(); actualizarIndice(); :};
+declaracion ::= tipo:t OP_GT DOSP OP_LT ID:id {: agregarRegla("Regla 8"); agregarTipo(t); agregarVariable(id); :};
+declaracion ::= tipo:t COMA declaracion COMA ID:id {: agregarRegla("Regla 9"); agregarTipo(t); agregarVariable(id); :};
 
 program ::= PR_PROGRAM programa PR_END {: agregarRegla("Regla 10"); :};
 programa ::= sentencia PYC {: agregarRegla("Regla 11"); :};
 programa ::= programa sentencia PYC {: agregarRegla("Regla 12"); :};
 
-programSinVar ::= PR_PROGRAM:pgrm programaSinVar:psv PR_END:prend {: agregarRegla("Regla 13"); RESULT = ((String) pgrm) + ((String) psv) + ((String) prend); :};
-programaSinVar ::= PR_WRITE:prwrite CONST_STRING:cstr PYC:pyc {: agregarRegla("Regla 14"); RESULT = ((String) prwrite) + ((String) cstr) + ((String) pyc); :};
-programaSinVar ::= programaSinVar:psv PR_WRITE:prwrite CONST_STRING:cstr PYC:pyc {: agregarRegla("Regla 15"); /*RESULT = ((String) psv) + ((String) prwrite) + ((String) cstr) + ((String) pyc);*/ :};
+programSinVar ::= PR_PROGRAM:pgrm programaSinVar:psv PR_END:prend {: RESULT = ((String) pgrm) + ((String) psv) + ((String) prend); agregarRegla("Regla 13", RESULT); :};
+programaSinVar ::= PR_WRITE:prwrite CONST_STRING:cstr PYC:pyc {: RESULT = ((String) prwrite) + ((String) cstr) + ((String) pyc); agregarRegla("Regla 14", RESULT); :};
+programaSinVar ::= programaSinVar:psv PR_WRITE:prwrite CONST_STRING:cstr PYC:pyc {: RESULT = ((String) psv) + ((String) prwrite) + ((String) cstr) + ((String) pyc); agregarRegla("Regla 15", RESULT); :};
 
 sentencia ::= asignacion {: agregarRegla("Regla 16"); :}
     | iteracion {: agregarRegla("Regla 17"); :}
