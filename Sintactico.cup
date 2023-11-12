@@ -30,10 +30,6 @@ parser code
         reglas.add(new Regla(numero));
     }
 
-	private void agregarRegla(String numero, Object antecedente) {
-        reglas.add(new Regla(numero, antecedente.toString()));
-    }
-
 	private void actualizarIndice() {
 	    indiceComienzoDeclaracion = tipos.size();
 	}
@@ -73,79 +69,80 @@ non terminal codigo, define, program, programSinVar, programaSinVar, listaDeclar
 
 start with codigo;
 
-codigo ::= define program {: agregarRegla("Regla 0 - con variables"); :};
-codigo ::= programSinVar:psv {: RESULT = ((String) psv); agregarRegla("Regla 0 - sin variables", RESULT); :};
+codigo ::= define program {: agregarRegla("[Regla 0] - inicio programa con variables"); :};
+codigo ::= programSinVar {: agregarRegla("[Regla 0] - inicio programa sin variables"); :};
 
-define ::= PR_DEFINE listaDeclaraciones PR_ENDDEFINE {: agregarRegla("Regla 1"); :};
-listaDeclaraciones ::= declaraciones {: agregarRegla("Regla 2"); :};
-listaDeclaraciones ::= listaDeclaraciones declaraciones {: agregarRegla("Regla 3"); :};
+define ::= PR_DEFINE listaDeclaraciones PR_ENDDEFINE {: agregarRegla("[Regla 1] - Define"); :};
+listaDeclaraciones ::= declaraciones {: agregarRegla("[Regla 2] - Declaraciones"); :};
+listaDeclaraciones ::= listaDeclaraciones declaraciones {: agregarRegla("[Regla 2] - Nueva declaracion"); :};
 
-tipo ::= PR_INT:cint {: agregarRegla("Regla 4"); RESULT = cint; :}
-    | PR_STR:cstr {: agregarRegla("Regla 5"); RESULT = cstr; :}
-    | PR_FLOAT:cfloat {: agregarRegla("Regla 6"); RESULT = cfloat; :};
+tipo ::= PR_INT:entero {: agregarRegla("[Regla 4] - tipo int"); RESULT = entero; :}
+    | PR_STR:str {: agregarRegla("[Regla 5] - tipo str"); RESULT = str; :}
+    | PR_FLOAT:flotante {: agregarRegla("[Regla 6] - tipo float"); RESULT = flotante; :};
 
-declaraciones ::= OP_LT declaracion OP_GT {: agregarRegla("Regla 7"); ordenarTipos(); actualizarIndice(); :};
-declaracion ::= tipo:t OP_GT DOSP OP_LT ID:id {: agregarRegla("Regla 8"); agregarTipo(t); agregarVariable(id); :};
-declaracion ::= tipo:t COMA declaracion COMA ID:id {: agregarRegla("Regla 9"); agregarTipo(t); agregarVariable(id); :};
+declaraciones ::= OP_LT declaracion OP_GT {: agregarRegla("[Regla 7] - fin declaracion"); ordenarTipos(); actualizarIndice(); :};
+declaracion ::= tipo:t OP_GT DOSP OP_LT ID:id {: agregarRegla("[Regla 8] - inicio declaracion"); agregarTipo(t); agregarVariable(id); :};
+declaracion ::= tipo:t COMA declaracion COMA ID:id {: agregarRegla("[Regla 9] - nuevo tipo/var"); agregarTipo(t); agregarVariable(id); :};
 
-program ::= PR_PROGRAM programa PR_END {: agregarRegla("Regla 10"); :};
-programa ::= sentencia PYC {: agregarRegla("Regla 11"); :};
-programa ::= programa sentencia PYC {: agregarRegla("Regla 12"); :};
 
-programSinVar ::= PR_PROGRAM:pgrm programaSinVar:psv PR_END:prend {: RESULT = ((String) pgrm) + ((String) psv) + ((String) prend); agregarRegla("Regla 13", RESULT); :};
-programaSinVar ::= PR_WRITE:prwrite CONST_STRING:cstr PYC:pyc {: RESULT = ((String) prwrite) + ((String) cstr) + ((String) pyc); agregarRegla("Regla 14", RESULT); :};
-programaSinVar ::= programaSinVar:psv PR_WRITE:prwrite CONST_STRING:cstr PYC:pyc {: RESULT = ((String) psv) + ((String) prwrite) + ((String) cstr) + ((String) pyc); agregarRegla("Regla 15", RESULT); :};
+program ::= PR_PROGRAM programa PR_END {: agregarRegla("[Regla 10] - inicio program"); :};
+programa ::= sentencia PYC {: agregarRegla("[Regla 11] - nueva sentencia"); :};
+programa ::= programa sentencia PYC {: agregarRegla("[Regla 12] - agregar sentencia"); :};
 
-sentencia ::= asignacion {: agregarRegla("Regla 16"); :}
-    | iteracion {: agregarRegla("Regla 17"); :}
-    | seleccion {: agregarRegla("Regla 18"); :}
-    | callWrite {: agregarRegla("Regla 19"); :};
+programSinVar ::= PR_PROGRAM programaSinVar PR_END {: agregarRegla("[Regla 13] - inicio program sin var"); :};
+programaSinVar ::= PR_WRITE CONST_STRING PYC {: agregarRegla("[Regla 14] - write string program sin var"); :};
+programaSinVar ::= programaSinVar PR_WRITE CONST_STRING PYC {: agregarRegla("[Regla 15] - agregar write program sin var"); :};
 
-variables ::= ID ASSIGN {: agregarRegla("Regla 20"); :}
-    | variables ID ASSIGN {: agregarRegla("Regla 21"); :};
+sentencia ::= asignacion {: agregarRegla("[Regla 16] - sentencia asignacion"); :}
+    | iteracion {: agregarRegla("[Regla 17] - sentencia iteracion"); :}
+    | seleccion {: agregarRegla("[Regla 18] - sentencia seleccion"); :}
+    | callWrite {: agregarRegla("[Regla 19] - sentencia write"); :};
 
-asignacion ::= variables expresion {: agregarRegla("Regla 22"); :};
-asignacion ::= variables CONST_STRING {: agregarRegla("Regla 23"); :};
+variables ::= ID ASSIGN {: agregarRegla("[Regla 20] - asignacion a variable"); :}
+    | variables ID ASSIGN {: agregarRegla("[Regla 21] - agregar asignacion a variable"); :};
 
-seleccion ::= PR_IF condicion BL_ABRIR programa BL_CERRAR PR_ENDIF {: agregarRegla("Regla 24"); :};
-seleccion ::= PR_IF condicion BL_ABRIR programa BL_CERRAR PR_ELSE BL_ABRIR programa BL_CERRAR PR_ENDIF {: agregarRegla("Regla 25"); :};
+asignacion ::= variables expresion {: agregarRegla("[Regla 22] - asignacion expresion"); :};
+asignacion ::= variables CONST_STRING {: agregarRegla("[Regla 23] - asignacion string"); :};
 
-iteracion ::= PR_REPEAT BL_ABRIR programa BL_CERRAR PR_UNTIL PAREN_ABRIR condicion PAREN_CERRAR {: agregarRegla("Regla 26"); :};
+seleccion ::= PR_IF condicion BL_ABRIR programa BL_CERRAR PR_ENDIF {: agregarRegla("[Regla 24] - seleccion IF"); :};
+seleccion ::= PR_IF condicion BL_ABRIR programa BL_CERRAR PR_ELSE BL_ABRIR programa BL_CERRAR PR_ENDIF {: agregarRegla("[Regla 25] - seleccion IF ELSE"); :};
 
-condicion ::= comparacion {: agregarRegla("Regla 27"); :};
-condicion ::= comparacion PR_AND comparacion {: agregarRegla("Regla 28"); :};
-condicion ::= comparacion PR_OR comparacion {: agregarRegla("Regla 29"); :};
+iteracion ::= PR_REPEAT BL_ABRIR programa BL_CERRAR PR_UNTIL PAREN_ABRIR condicion PAREN_CERRAR {: agregarRegla("[Regla 26] - iteracion"); :};
 
-comparacion ::= expresion comparador expresion {: agregarRegla("Regla 30"); :};
-comparador ::= OP_GE {: agregarRegla("Regla 31"); :}
-    | OP_LE {: agregarRegla("Regla 32"); :}
-    | OP_LT {: agregarRegla("Regla 33"); :}
-    | OP_GT {: agregarRegla("Regla 34"); :}
-    | OP_EQ {: agregarRegla("Regla 35"); :}
-    | OP_DIFF {: agregarRegla("Regla 36"); :};
+condicion ::= comparacion {: agregarRegla("[Regla 27] - condicion comparacion"); :};
+condicion ::= comparacion PR_AND comparacion {: agregarRegla("[Regla 28] - AND"); :};
+condicion ::= comparacion PR_OR comparacion {: agregarRegla("[Regla 29] - OR"); :};
 
-expresion ::= expresion OP_SUM termino {: agregarRegla("Regla 37"); :};
-expresion ::= expresion OP_RESTA termino {: agregarRegla("Regla 38"); :};
-expresion ::= termino {: agregarRegla("Regla 39"); :};
-termino ::= termino OP_MULT factor {: agregarRegla("Regla 40"); :}
-    | termino OP_DIV factor {: agregarRegla("Regla 41"); :}
-    | factor {: agregarRegla("Regla 42"); :};
-factor ::= PAREN_ABRIR expresion PAREN_CERRAR | ID | constante {: agregarRegla("Regla 43"); :};
-factor ::= callMin | callMax {: agregarRegla("Regla 44"); :};
+comparacion ::= expresion comparador expresion {: agregarRegla("[Regla 30] - Comparacion"); :};
+comparador ::= OP_GE {: agregarRegla("[Regla 31] - Operador >="); :}
+    | OP_LE {: agregarRegla("[Regla 32] - operador <="); :}
+	| OP_LT {: agregarRegla("[Regla 33] - operador <"); :}
+    | OP_GT {: agregarRegla("[Regla 34] - operador >"); :}
+    | OP_EQ {: agregarRegla("[Regla 35] - operador =="); :}
+    | OP_DIFF {: agregarRegla("[Regla 36] - operador <>"); :};
 
-constante ::= CONST_INT {: agregarRegla("Regla 45"); :}
-    | CONST_FLOAT {: agregarRegla("Regla 46"); :}
-    | CONST_HEX {: agregarRegla("Regla 47"); :}
-    | CONST_BIN {: agregarRegla("Regla 48"); :};
+expresion ::= expresion OP_SUM termino {: agregarRegla("[Regla 37] - expresión + término"); :};
+expresion ::= expresion OP_RESTA termino {: agregarRegla("[Regla 38] - expresión - término"); :};
+expresion ::= termino {: agregarRegla("[Regla 39] - nuevo término"); :};
+termino ::= termino OP_MULT factor {: agregarRegla("[Regla 40] - termino * factor"); :}
+    | termino OP_DIV factor {: agregarRegla("[Regla 41] - termino / factor"); :}
+    | factor {: agregarRegla("[Regla 42] - agregar factor"); :};
+factor ::= PAREN_ABRIR expresion PAREN_CERRAR | ID | constante {: agregarRegla("[Regla 43] - fin expresion"); :};
+factor ::= callMin | callMax {: agregarRegla("[Regla 44] - nuevo factor"); :};
 
-lista ::= LS_ABRIR elementoLista LS_CERRAR {: agregarRegla("Regla 49"); :};
-elementoLista ::= elementoLista COMA expresion {: agregarRegla("Regla 50"); :}
-    | expresion {: agregarRegla("Regla 51"); :};
+constante ::= CONST_INT {: agregarRegla("[Regla 45] - constante entera"); :}
+    | CONST_FLOAT {: agregarRegla("[Regla 46] - constante decimal"); :}
+    | CONST_HEX {: agregarRegla("[Regla 47] - constante hexadecimal"); :}
+    | CONST_BIN {: agregarRegla("[Regla 48] - constante binaria"); :};
 
-callWrite ::= PR_WRITE constante {: agregarRegla("Regla 52"); :}
-	| PR_WRITE CONST_STRING {: agregarRegla("Regla 53"); :}
-	| PR_WRITE ID {: agregarRegla("Regla 54"); :};
-callMin ::= PR_MINIMO LS_ABRIR LS_CERRAR {: agregarRegla("Regla 55"); :};
-callMin ::= PR_MINIMO lista {: agregarRegla("Regla 56"); :};
-callMax ::= PR_MAXIMO LS_ABRIR LS_CERRAR {: agregarRegla("Regla 57"); :};
-callMax ::= PR_MAXIMO lista {: agregarRegla("Regla 58"); :};
+lista ::= LS_ABRIR elementoLista LS_CERRAR {: agregarRegla("[Regla 49] - nueva lista"); :};
+elementoLista ::= elementoLista COMA expresion {: agregarRegla("[Regla 50] - nueva expresión lista"); :}
+    | expresion {: agregarRegla("[Regla 51] - expresión lista"); :};
+
+callWrite ::= PR_WRITE constante {: agregarRegla("[Regla 52] - llamada write constante"); :}
+	| PR_WRITE CONST_STRING {: agregarRegla("[Regla 53] - llamada write str"); :}
+	| PR_WRITE ID {: agregarRegla("[Regla 54] - llamada write id"); :};
+callMin ::= PR_MINIMO LS_ABRIR LS_CERRAR {: agregarRegla("[Regla 55] - llamada minimo lista vacía"); :};
+callMin ::= PR_MINIMO lista {: agregarRegla("[Regla 56] - llamada minimo"); :};
+callMax ::= PR_MAXIMO LS_ABRIR LS_CERRAR {: agregarRegla("[Regla 57] - llamada maximo lista vacía"); :};
+callMax ::= PR_MAXIMO lista {: agregarRegla("[Regla 58] - llamada maximo"); :};

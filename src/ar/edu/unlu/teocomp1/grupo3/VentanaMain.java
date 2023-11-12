@@ -79,7 +79,9 @@ public class VentanaMain extends JFrame {
 
         JTextArea textArea = new JTextArea();
         textArea.setFont(new Font("Courier New", Font.PLAIN, 20));
-        contentPane.add(new JScrollPane(textArea), BorderLayout.CENTER);
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+        panel.add(new JScrollPane(textArea), BorderLayout.CENTER);
 
         // Lee el archivo línea por línea y coloca el contenido en el JTextArea.
         JMenuItem menuItemAbrir = new JMenuItem("Abrir");
@@ -158,7 +160,8 @@ public class VentanaMain extends JFrame {
         tokensPanel.setLayout(new BorderLayout());
         tokensPanel.setBorder(tokensBorder);
         tokensPanel.add(new JScrollPane(listaGuiTokens), BorderLayout.CENTER);
-        contentPane.add(tokensPanel, BorderLayout.SOUTH);
+        panel.add(tokensPanel, BorderLayout.SOUTH);
+        contentPane.add(panel, BorderLayout.CENTER);
 
         DefaultListModel<Regla> reglasListModel = new DefaultListModel<>();
         JList<Regla> listaGuiReglas = new JList<>(reglasListModel);
@@ -181,8 +184,7 @@ public class VentanaMain extends JFrame {
                     boolean isSelected, boolean cellHasFocus) {
 
                 String texto = value.getNumero();
-                String antecedente = value.getAntecedente();
-                JLabel label = new JLabel(texto + " Antecedente: " + antecedente);
+                JLabel label = new JLabel(texto);
                 label.setFont(labelFont);
 
                 /*
