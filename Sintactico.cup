@@ -1,5 +1,6 @@
 package ar.edu.unlu.teocomp1.grupo3;
 
+
 import java_cup.runtime.*;
 import java.util.List;
 import java.util.ArrayList;
@@ -33,8 +34,8 @@ non terminal codigo, define, program, programSinVar, programaSinVar, listaDeclar
 
 start with codigo;
 
-codigo ::= define program {: agregarRegla("Regla 0"); :};
-codigo ::= programSinVar:psv {: agregarRegla("Regla 0"); RESULT = ((String) psv); :};
+codigo ::= define program {: agregarRegla("Regla 0 - con variables"); :};
+codigo ::= programSinVar:psv {: agregarRegla("Regla 0 - sin variables"); RESULT = ((String) psv); :};
 
 define ::= PR_DEFINE listaDeclaraciones PR_ENDDEFINE {: agregarRegla("Regla 1"); :};
 listaDeclaraciones ::= declaraciones {: agregarRegla("Regla 2"); :};

@@ -17,7 +17,7 @@ public class ConsolaMain {
         for (Resultado resultado : lexico.getResultados()) {
             System.out.println(resultado.getLexema());
         }*/
-        parser parser = new parser(lexico);
+        Sintactico parser = new Sintactico(lexico);
         try {
 			parser.parse();
 		} catch (Exception e) {
