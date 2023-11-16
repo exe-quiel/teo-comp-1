@@ -2,15 +2,19 @@
 
 ## Primera entrega (5/10)
 
-Consiste en la implementación en Java de un analizador lexicográfico para un lenguaje inventado por nosotros. Usamos [JFlex](https://www.jflex.de/) para generar una clase llamada [Lexico.java](src/ar/edu/unlu/teocomp1/grupo3/Lexico.java), que se encarga de realizar el análisis. Este archivo se genera a partir de [TeoComp1Lexer.flex](TeoComp1Lexer.flex), donde se defininen las reglas lexicográficas del lenguaje.
+Consiste en la implementación en Java de un analizador lexicográfico para un lenguaje inventado por nosotros. Usamos [JFlex](https://www.jflex.de/) para generar una clase llamada [Lexico.java](src/ar/edu/unlu/teocomp1/grupo3/Lexico.java), que se encarga de realizar el análisis léxico. Este archivo se genera a partir de [Lexico.flex](Lexico.flex), donde se defininen las reglas lexicográficas del lenguaje.
+
+## Segunda entrega
+
+Para la segunda etapa, generamos un analizador sintáctico usando la herramienta [Java Cup](https://www2.cs.tum.edu/projects/cup/). La clase generada es [Sintactico.java](src/ar/edu/unlu/teocomp1/grupo3/Sintactico.java), a la cual le pasamos la instancia del analizador lexicográfico para que pueda obtener los tokens y realizar el análisis sintáctico.
+
+El archivo a partir del cual se genera el analizador sintáctico es [Sintactico.cup](Sintactico.cup).
+
+## Cómo ejecutar el programa
 
 Para ejecutar el programa, se debe correr el método `main` de la clase [VentanaMain.java](src/ar/edu/unlu/teocomp1/grupo3/VentanaMain.java), o se puede ejecutar el archivo `TP_Grupo3.jar`.
 
 **Nota:** el JAR se compiló con Java 8, por lo que se debe ejecutar con esa versión o con una posterior.
-
-## Segunda entrega
-
-(TO-DO)
 
 ## Lenguaje
 

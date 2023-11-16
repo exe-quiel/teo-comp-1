@@ -9,7 +9,7 @@ import java.util.Collections;
 parser code
 {:
     public void syntax_error(Symbol symbol) {
-        System.out.println("Error en la lÃ­nea " + (symbol.right + 1) + " columna " + symbol.left + ", " + symbol + " no reconocido, valor " + symbol.value);
+        System.out.println("Error en la linea " + (symbol.right + 1) + " columna " + symbol.left + ", " + symbol + " no reconocido, valor " + symbol.value);
     }
 
     private List<Regla> reglas = new ArrayList<>();
@@ -121,9 +121,9 @@ comparador ::= OP_GE {: agregarRegla("[Regla 31] - Operador >="); :}
     | OP_EQ {: agregarRegla("[Regla 35] - operador =="); :}
     | OP_DIFF {: agregarRegla("[Regla 36] - operador <>"); :};
 
-expresion ::= expresion OP_SUM termino {: agregarRegla("[Regla 37] - expresión + término"); :};
-expresion ::= expresion OP_RESTA termino {: agregarRegla("[Regla 38] - expresión - término"); :};
-expresion ::= termino {: agregarRegla("[Regla 39] - nuevo término"); :};
+expresion ::= expresion OP_SUM termino {: agregarRegla("[Regla 37] - expresion + termino"); :};
+expresion ::= expresion OP_RESTA termino {: agregarRegla("[Regla 38] - expresion - termino"); :};
+expresion ::= termino {: agregarRegla("[Regla 39] - nuevo termino"); :};
 termino ::= termino OP_MULT factor {: agregarRegla("[Regla 40] - termino * factor"); :}
     | termino OP_DIV factor {: agregarRegla("[Regla 41] - termino / factor"); :}
     | factor {: agregarRegla("[Regla 42] - agregar factor"); :};
@@ -136,13 +136,13 @@ constante ::= CONST_INT {: agregarRegla("[Regla 45] - constante entera"); :}
     | CONST_BIN {: agregarRegla("[Regla 48] - constante binaria"); :};
 
 lista ::= LS_ABRIR elementoLista LS_CERRAR {: agregarRegla("[Regla 49] - nueva lista"); :};
-elementoLista ::= elementoLista COMA expresion {: agregarRegla("[Regla 50] - nueva expresión lista"); :}
-    | expresion {: agregarRegla("[Regla 51] - expresión lista"); :};
+elementoLista ::= elementoLista COMA expresion {: agregarRegla("[Regla 50] - nueva expresion lista"); :}
+    | expresion {: agregarRegla("[Regla 51] - expresion lista"); :};
 
 callWrite ::= PR_WRITE constante {: agregarRegla("[Regla 52] - llamada write constante"); :}
 	| PR_WRITE CONST_STRING {: agregarRegla("[Regla 53] - llamada write str"); :}
 	| PR_WRITE ID {: agregarRegla("[Regla 54] - llamada write id"); :};
-callMin ::= PR_MINIMO LS_ABRIR LS_CERRAR {: agregarRegla("[Regla 55] - llamada minimo lista vacía"); :};
+callMin ::= PR_MINIMO LS_ABRIR LS_CERRAR {: agregarRegla("[Regla 55] - llamada minimo lista vacia"); :};
 callMin ::= PR_MINIMO lista {: agregarRegla("[Regla 56] - llamada minimo"); :};
-callMax ::= PR_MAXIMO LS_ABRIR LS_CERRAR {: agregarRegla("[Regla 57] - llamada maximo lista vacía"); :};
+callMax ::= PR_MAXIMO LS_ABRIR LS_CERRAR {: agregarRegla("[Regla 57] - llamada maximo lista vacoa"); :};
 callMax ::= PR_MAXIMO lista {: agregarRegla("[Regla 58] - llamada maximo"); :};

@@ -40,12 +40,18 @@ import javax.swing.event.ListSelectionListener;
 
 public class VentanaMain extends JFrame {
 
+    /**
+     * Tokens correspondientes a constantes literales
+     */
     private static final List<String> CONSTANT_LITERAL_TOKENS = Arrays.asList("CONST_STRING", "CONST_INT",
             "CONST_FLOAT", "CONST_BIN", "CONST_HEX");
+    /**
+     * Tokens que se agregan a la tabla de símbolos
+     */
     private static final List<String> TOKENS_TABLA_SIMBOLO = Arrays.asList("ID", "CONST_STRING", "CONST_INT",
             "CONST_FLOAT", "CONST_HEX", "CONST_BIN");
+
     private JPanel contentPane;
-    private Font menuFont = new Font("SansSerif", Font.PLAIN, 15);
 
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
@@ -67,6 +73,8 @@ public class VentanaMain extends JFrame {
 
         JMenuBar menuBar = new JMenuBar();
         setJMenuBar(menuBar);
+
+        Font menuFont = new Font("SansSerif", Font.PLAIN, 15);
 
         JMenu menuArchivo = new JMenu("Archivo");
         menuArchivo.setFont(menuFont);
@@ -201,9 +209,9 @@ public class VentanaMain extends JFrame {
         /*
          * Este botón:
          * 
-         * 1. instancia la clase generada Lexico
+         * 1. instancia las clases generadas Lexico y Sintactico
          * 2. analiza el contenido del JTextArea
-         * 3. muestra los resultados en el JList
+         * 3. muestra los resultados en los JList
          * 4. crea el archivo que contiene la tabla de símbolos
          */
         JMenuItem menuItemAnalizar = new JMenuItem("Analizar");
@@ -218,7 +226,7 @@ public class VentanaMain extends JFrame {
                 String inputText = textArea.getText(); // Obtener el texto de la TextArea
                 try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(inputText.getBytes());
                         InputStreamReader inputStreamReader = new InputStreamReader(byteArrayInputStream)) {
-                    // Usar lexico
+
                     Lexico lexer = new Lexico(inputStreamReader);
                     Sintactico parser = new Sintactico(lexer);
                     // lexer.next_token();
