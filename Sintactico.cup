@@ -9,7 +9,7 @@ import java.util.Collections;
 parser code
 {:
     public void syntax_error(Symbol symbol) {
-        System.out.println("Error en la linea " + (symbol.right + 1) + " columna " + symbol.left + ", " + symbol + " no reconocido, valor " + symbol.value);
+    	agregarRegla("[ERROR] No se esperaba lexema: " + symbol.value);
     }
 
     private List<Regla> reglas = new ArrayList<>();
@@ -35,12 +35,12 @@ parser code
 	}
 
 	private void ordenarTipos() {
-		System.out.println("indiceCom " + indiceComienzoDeclaracion);
+		//System.out.println("indiceCom " + indiceComienzoDeclaracion);
 	    List<String> listaAOrdenar = tipos.subList(indiceComienzoDeclaracion, tipos.size());
 	    Collections.reverse(listaAOrdenar);
 	    int j = 0;
 	    for (int i = indiceComienzoDeclaracion; i < tipos.size(); i++) {
-	    	System.out.println("i " + i);
+	    	//System.out.println("i " + i);
 	        tipos.set(i, listaAOrdenar.get(j++));
 	    }
 	}
@@ -138,11 +138,12 @@ constante ::= CONST_INT {: agregarRegla("[Regla 45] - constante entera"); :}
 lista ::= LS_ABRIR elementoLista LS_CERRAR {: agregarRegla("[Regla 49] - nueva lista"); :};
 elementoLista ::= elementoLista COMA expresion {: agregarRegla("[Regla 50] - nueva expresion lista"); :}
     | expresion {: agregarRegla("[Regla 51] - expresion lista"); :};
+   
 
 callWrite ::= PR_WRITE constante {: agregarRegla("[Regla 52] - llamada write constante"); :}
 	| PR_WRITE CONST_STRING {: agregarRegla("[Regla 53] - llamada write str"); :}
 	| PR_WRITE ID {: agregarRegla("[Regla 54] - llamada write id"); :};
 callMin ::= PR_MINIMO LS_ABRIR LS_CERRAR {: agregarRegla("[Regla 55] - llamada minimo lista vacia"); :};
 callMin ::= PR_MINIMO lista {: agregarRegla("[Regla 56] - llamada minimo"); :};
-callMax ::= PR_MAXIMO LS_ABRIR LS_CERRAR {: agregarRegla("[Regla 57] - llamada maximo lista vacoa"); :};
+callMax ::= PR_MAXIMO LS_ABRIR LS_CERRAR {: agregarRegla("[Regla 57] - llamada maximo lista vacia"); :};
 callMax ::= PR_MAXIMO lista {: agregarRegla("[Regla 58] - llamada maximo"); :};

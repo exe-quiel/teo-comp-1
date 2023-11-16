@@ -86,7 +86,7 @@ CONST_HEX = \((DIGITO|[A-F]|[a-f])+,16\)
     
     "float"           {agregarToken("PR_FLOAT"); return new Symbol(sym.PR_FLOAT, this.yytext());}
 
-    {ESPACIO}         {System.out.println("espacio");}
+    {ESPACIO}         {/*System.out.println("espacio");*/}
 
     {ID}              {agregarToken("ID"); return new Symbol(sym.ID, this.yytext());}
 
@@ -122,7 +122,7 @@ CONST_HEX = \((DIGITO|[A-F]|[a-f])+,16\)
 
     {CONST_HEX}       {agregarToken("CONST_HEX"); return new Symbol(sym.CONST_HEX, this.yytext());}
 
-    {COMMENT}         {System.out.println("COMMENT");}
+    {COMMENT}         {/*System.out.println("COMMENT");*/}
 
     ":="              {agregarToken("ASSIGN"); return new Symbol(sym.ASSIGN, this.yytext());}
 
@@ -164,11 +164,11 @@ CONST_HEX = \((DIGITO|[A-F]|[a-f])+,16\)
 
     ";"               {agregarToken("PYC"); return new Symbol(sym.PYC, this.yytext());}
 
-    {TAB}             {System.out.println("tab");}
+    {TAB}             {/*System.out.println("tab");*/}
 
-    {FORM_FEED}       {System.out.println("FORM_FEED");}
+    {FORM_FEED}       {/*System.out.println("FORM_FEED");*/}
 
-    {ENTER}           {System.out.println("ENTER");}
+    {ENTER}           {/*System.out.println("ENTER");*/}
 }
 
 [^]                   {System.err.printf("ERROR: Lexema: %s | linea %s | Columna %s\n", this.yytext(), this.yyline, this.yycolumn);}

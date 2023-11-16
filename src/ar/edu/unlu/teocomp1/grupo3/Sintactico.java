@@ -316,7 +316,7 @@ public class Sintactico extends java_cup.runtime.lr_parser {
 
 
     public void syntax_error(Symbol symbol) {
-        System.out.println("Error en la línea " + (symbol.right + 1) + " columna " + symbol.left + ", " + symbol + " no reconocido, valor " + symbol.value);
+    	agregarRegla("[ERROR] No se esperaba lexema: " + symbol.value);
     }
 
     private List<Regla> reglas = new ArrayList<>();
@@ -342,12 +342,12 @@ public class Sintactico extends java_cup.runtime.lr_parser {
 	}
 
 	private void ordenarTipos() {
-		System.out.println("indiceCom " + indiceComienzoDeclaracion);
+		//System.out.println("indiceCom " + indiceComienzoDeclaracion);
 	    List<String> listaAOrdenar = tipos.subList(indiceComienzoDeclaracion, tipos.size());
 	    Collections.reverse(listaAOrdenar);
 	    int j = 0;
 	    for (int i = indiceComienzoDeclaracion; i < tipos.size(); i++) {
-	    	System.out.println("i " + i);
+	    	//System.out.println("i " + i);
 	        tipos.set(i, listaAOrdenar.get(j++));
 	    }
 	}
@@ -774,7 +774,7 @@ class CUP$Sintactico$actions {
           case 39: // expresion ::= expresion OP_SUM termino 
             {
               Object RESULT =null;
-		 agregarRegla("[Regla 37] - expresi�n + t�rmino"); 
+		 agregarRegla("[Regla 37] - expresion + termino"); 
               CUP$Sintactico$result = parser.getSymbolFactory().newSymbol("expresion",18, ((java_cup.runtime.Symbol)CUP$Sintactico$stack.elementAt(CUP$Sintactico$top-2)), ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()), RESULT);
             }
           return CUP$Sintactico$result;
@@ -783,7 +783,7 @@ class CUP$Sintactico$actions {
           case 40: // expresion ::= expresion OP_RESTA termino 
             {
               Object RESULT =null;
-		 agregarRegla("[Regla 38] - expresi�n - t�rmino"); 
+		 agregarRegla("[Regla 38] - expresion - termino"); 
               CUP$Sintactico$result = parser.getSymbolFactory().newSymbol("expresion",18, ((java_cup.runtime.Symbol)CUP$Sintactico$stack.elementAt(CUP$Sintactico$top-2)), ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()), RESULT);
             }
           return CUP$Sintactico$result;
@@ -792,7 +792,7 @@ class CUP$Sintactico$actions {
           case 41: // expresion ::= termino 
             {
               Object RESULT =null;
-		 agregarRegla("[Regla 39] - nuevo t�rmino"); 
+		 agregarRegla("[Regla 39] - nuevo termino"); 
               CUP$Sintactico$result = parser.getSymbolFactory().newSymbol("expresion",18, ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()), ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()), RESULT);
             }
           return CUP$Sintactico$result;
@@ -918,7 +918,7 @@ class CUP$Sintactico$actions {
           case 55: // elementoLista ::= elementoLista COMA expresion 
             {
               Object RESULT =null;
-		 agregarRegla("[Regla 50] - nueva expresi�n lista"); 
+		 agregarRegla("[Regla 50] - nueva expresion lista"); 
               CUP$Sintactico$result = parser.getSymbolFactory().newSymbol("elementoLista",23, ((java_cup.runtime.Symbol)CUP$Sintactico$stack.elementAt(CUP$Sintactico$top-2)), ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()), RESULT);
             }
           return CUP$Sintactico$result;
@@ -927,7 +927,7 @@ class CUP$Sintactico$actions {
           case 56: // elementoLista ::= expresion 
             {
               Object RESULT =null;
-		 agregarRegla("[Regla 51] - expresi�n lista"); 
+		 agregarRegla("[Regla 51] - expresion lista"); 
               CUP$Sintactico$result = parser.getSymbolFactory().newSymbol("elementoLista",23, ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()), ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()), RESULT);
             }
           return CUP$Sintactico$result;
@@ -963,7 +963,7 @@ class CUP$Sintactico$actions {
           case 60: // callMin ::= PR_MINIMO LS_ABRIR LS_CERRAR 
             {
               Object RESULT =null;
-		 agregarRegla("[Regla 55] - llamada minimo lista vac�a"); 
+		 agregarRegla("[Regla 55] - llamada minimo lista vacia"); 
               CUP$Sintactico$result = parser.getSymbolFactory().newSymbol("callMin",26, ((java_cup.runtime.Symbol)CUP$Sintactico$stack.elementAt(CUP$Sintactico$top-2)), ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()), RESULT);
             }
           return CUP$Sintactico$result;
@@ -981,7 +981,7 @@ class CUP$Sintactico$actions {
           case 62: // callMax ::= PR_MAXIMO LS_ABRIR LS_CERRAR 
             {
               Object RESULT =null;
-		 agregarRegla("[Regla 57] - llamada maximo lista vac�a"); 
+		 agregarRegla("[Regla 57] - llamada maximo lista vacia"); 
               CUP$Sintactico$result = parser.getSymbolFactory().newSymbol("callMax",25, ((java_cup.runtime.Symbol)CUP$Sintactico$stack.elementAt(CUP$Sintactico$top-2)), ((java_cup.runtime.Symbol)CUP$Sintactico$stack.peek()), RESULT);
             }
           return CUP$Sintactico$result;

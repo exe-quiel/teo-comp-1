@@ -784,22 +784,22 @@ public class Lexico implements java_cup.runtime.Scanner {
             // fall through
           case 52: break;
           case 4: 
-            { System.out.println("espacio");
+            { /*System.out.println("espacio");*/
             } 
             // fall through
           case 53: break;
           case 5: 
-            { System.out.println("tab");
+            { /*System.out.println("tab");*/
             } 
             // fall through
           case 54: break;
           case 6: 
-            { System.out.println("FORM_FEED");
+            { /*System.out.println("FORM_FEED");*/
             } 
             // fall through
           case 55: break;
           case 7: 
-            { System.out.println("ENTER");
+            { /*System.out.println("ENTER");*/
             } 
             // fall through
           case 56: break;
@@ -955,7 +955,7 @@ public class Lexico implements java_cup.runtime.Scanner {
             // fall through
           case 84: break;
           case 36: 
-            { System.out.println("COMMENT");
+            { /*System.out.println("COMMENT");*/
             } 
             // fall through
           case 85: break;

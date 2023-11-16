@@ -191,13 +191,14 @@ public class VentanaMain extends JFrame {
             public Component getListCellRendererComponent(JList<? extends Regla> list, Regla value, int index,
                     boolean isSelected, boolean cellHasFocus) {
 
-                String texto = value.getNumero();
+                String texto = value.getDescripcion();
                 JLabel label = new JLabel(texto);
                 label.setFont(labelFont);
 
-                /*
-                 * if (value.isError()) { label.setForeground(Color.red); }
-                 */
+                if (value.isError()) { 
+                	label.setForeground(Color.red);
+                }
+
                 return label;
             }
         });
@@ -249,9 +250,6 @@ public class VentanaMain extends JFrame {
                         writer.write("--------------------------------------------------------------------\n");
 
                         Set<String> tokensYaIncluidos = new HashSet<String>();
-
-                        System.out.println(parser.getTipos());
-                        System.out.println(parser.getVariables());
 
                         Map<String, String> varsToTipos = new HashMap<>();
 

@@ -2,14 +2,18 @@ package ar.edu.unlu.teocomp1.grupo3;
 
 public class Regla {
 
-    private String numero;
+    private String descripcion;
 
-    public Regla(String numero) {
-        this.numero = numero;
+    public Regla(String descripcion) {
+        this.descripcion = descripcion;
     }
 
-    public String getNumero() {
-        return numero;
+    public String getDescripcion() {
+        return descripcion;
     }
+
+	public boolean isError() {
+		return descripcion != null && descripcion.startsWith("[ERROR]") ;
+	}
 
 }
