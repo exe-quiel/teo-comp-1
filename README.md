@@ -4,7 +4,7 @@
 
 Consiste en la implementación en Java de un analizador lexicográfico para un lenguaje inventado por nosotros. Usamos [JFlex](https://www.jflex.de/) para generar una clase llamada [Lexico.java](src/ar/edu/unlu/teocomp1/grupo3/Lexico.java), que se encarga de realizar el análisis léxico. Este archivo se genera a partir de [Lexico.flex](Lexico.flex), donde se defininen las reglas lexicográficas del lenguaje.
 
-## Segunda entrega
+## Segunda entrega (16/11)
 
 Para la segunda etapa, generamos un analizador sintáctico usando la herramienta [Java Cup](https://www2.cs.tum.edu/projects/cup/). La clase generada es [Sintactico.java](src/ar/edu/unlu/teocomp1/grupo3/Sintactico.java), a la cual le pasamos la instancia del analizador lexicográfico para que pueda obtener los tokens y realizar el análisis sintáctico.
 
@@ -14,7 +14,7 @@ El archivo a partir del cual se genera el analizador sintáctico es [Sintactico.
 
 Para ejecutar el programa, se debe correr el método `main` de la clase [VentanaMain.java](src/ar/edu/unlu/teocomp1/grupo3/VentanaMain.java), o se puede ejecutar el archivo `TP_Grupo3.jar`.
 
-**Nota:** el JAR se compiló con Java 8, por lo que se debe ejecutar con esa versión o con una posterior.
+**Nota:** el JAR se compiló con Java 18, por lo que se debe ejecutar con esa versión o con una posterior.
 
 ## Lenguaje
 
@@ -76,27 +76,30 @@ Token | Explicación | Ejemplo
 
 ```
 define
-  str : string, str_vacio
-  int : contador
-  bin : bin_var
-  hex : hex_var
+  <str, int, int> : <s1, min, max>
+  <int, str> : <bin_var, str_var>
+  <int> : <contador>
+  <int> : <hex_var>
 enddefine
 
 program
-  string := "hola-?";
+  s1 := "hola-?";
   bin_var := (10,2);
   hex_var := (af,16);
-  str_vacio := "";
+  str_var := "prueba";
 
-  contador := 0
+  contador := 0;
   repeat {
     contador := contador + 1;
-    if ((contador / 2) <> 2) {
-      write(contador);
-    } endif
+    if contador <> 2 {
+      write contador;
+    } endif;
   } until (contador == 5);
 
-  write(maximo([1,5,8])); /* Devuelve 8 */
-  write(minimo([1,5,8])); /* Devuelve 1 */
+  max := maximo [1,5,8]; /* Devuelve 1 */
+  min := minimo [1,5,8]; /* Devuelve 8 */
+  write max;
+  write min;
+  write str_var;
 end
 ```
