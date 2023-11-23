@@ -142,6 +142,7 @@ public class VentanaMain extends JFrame {
                 JLabel label = new JLabel(texto);
                 label.setFont(labelFont);
                 if (value.isError()) {
+                    label.setText(label.getText().concat(" -> " + value.getMensajeError()));
                     label.setForeground(Color.red);
                 }
                 return label;

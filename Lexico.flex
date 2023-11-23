@@ -13,9 +13,9 @@ import java.util.ArrayList;
         tokens.add(new Token(token, this.yytext(), this.yyline, this.yycolumn, this.yychar, this.yylength()));
     }
 
-    /*private void agregarError(){
-        tokens.add(new Token(this.yytext(), this.yyline, this.yycolumn, this.yychar, this.yylength()));
-    } */
+    private void agregarError(String mensaje){
+        tokens.add(new Token(this.yytext(), this.yyline, this.yycolumn, this.yychar, this.yylength(), mensaje));
+    }
 
     public List<Token> getTokens() {
         return tokens;
@@ -95,7 +95,9 @@ CONST_HEX = \((DIGITO|[A-F]|[a-f])+,16\)
                            agregarToken("CONST_STRING");
                            return new Symbol(sym.CONST_STRING, this.yytext());
                        } else {
-                           System.err.printf ("ERROR: Se encontro string con %s caracteres \n", this.yylength()-2);
+                           String mensaje = String.format("ERROR: Se encontro string con %s caracteres \n", this.yylength() - 2);
+                           System.err.printf(mensaje);
+                           agregarError(mensaje);
                        }
                       }
 
@@ -104,7 +106,9 @@ CONST_HEX = \((DIGITO|[A-F]|[a-f])+,16\)
                            agregarToken("CONST_INT");
                            return new Symbol(sym.CONST_INT, this.yytext());
                        } else {
-                           System.err.printf ("ERROR: Se encontro int mayor a 16 bits: %s \n", this.yytext());
+                           String mensaje = String.format("ERROR: Se encontro int mayor a 16 bits: %s \n", this.yytext());
+                           System.err.printf(mensaje);
+                           agregarError(mensaje);
                        }
                       }
 
@@ -113,8 +117,10 @@ CONST_HEX = \((DIGITO|[A-F]|[a-f])+,16\)
                            Float.parseFloat(this.yytext());
                            agregarToken("CONST_FLOAT");
                            return new Symbol(sym.CONST_FLOAT, this.yytext());
-                       } catch (NumberFormatException e){ 
-                           System.err.printf ("ERROR: Se encontro float invalido: %s \n", this.yytext());
+                       } catch (NumberFormatException e){
+                           String mensaje = String.format("ERROR: Se encontro float invalido: %s \n", this.yytext());
+                           System.err.printf(mensaje);
+                           agregarError(mensaje);
                        }
                       }
 

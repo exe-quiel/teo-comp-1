@@ -7,18 +7,20 @@ public class Token {
     private int columna;
     private int inicio;
     private int tamanio;
+    private String mensajeError;
 
     public Token(String token, String lexema, int linea, int columna, int inicio, int tamanio) {
-        this(lexema, linea, columna, inicio, tamanio);
+        this(lexema, linea, columna, inicio, tamanio, null);
         this.token = token;
     }
 
-    public Token(String lexema, int linea, int columna, int inicio, int tamanio) {
+    public Token(String lexema, int linea, int columna, int inicio, int tamanio, String mensajeError) {
         this.lexema = lexema;
         this.linea = linea;
         this.columna = columna;
         this.inicio = inicio;
         this.tamanio = tamanio;
+        this.mensajeError = mensajeError;
     }
 
     public String getLexema() {
@@ -67,6 +69,14 @@ public class Token {
 
     public void setTamanio(int tamanio) {
         this.tamanio = tamanio;
+    }
+
+    public String getMensajeError() {
+        return mensajeError;
+    }
+
+    public void setMensajeError(String mensajeError) {
+        this.mensajeError = mensajeError;
     }
 
     public boolean isError() {
